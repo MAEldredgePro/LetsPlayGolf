@@ -1,14 +1,27 @@
 # Let's Play Golf! Developer Notes
 
 ## Dev Plan
- - [ ] Develop against phone screen dimensions - use Chrome dev tools to display
+ - Develop against phone screen dimensions - use Chrome dev tools to display
 my app/web page on a phone-like screen.
- - [ ] Develop for landscape orientation first
- - [ ] Create Course Selection Screen
+ - Develop for landscape orientation first
+ - Create the following pages:
+   - [ ] Welcome/splash
+   - [ ] Course selection
+     - [ ] dropdown populated with three predefined courses
+   - [ ] Scorecard
+     - [ ] 18 holes, in and out
+     - [ ] up to four players
+       - [ ] only render lines for number of active players
+     - [ ] auto computed running total score
+     - [ ] (opt) red/green for over/under par?
+   - [ ] End game? Celebrate?
+   - [ ] (opt) view previous games
 
  ## Tasks
  - [x] Download a golf scorecard to use as a model/mock
- - [ ] Figure out the main flow of the program.  Walk through from user's POV
+ - [ ] Figure out the main flow of the program.
+   - [x] Walk through from user's POV
+   - [ ] Walk through from software flow POV
 
 ---
 
@@ -38,3 +51,16 @@ User opens the app
    - celebrate?
  - Stopping game in the middle?
  - End game behavior?
+
+---
+
+## General Page Software Flow
+ - Create object representing page date
+   - load from persistent storage (and/or external data source)
+   - render page
+   - wait for user interaction
+ - On User Interaction
+   - update page object
+   - save object to persistent storage
+   - render page
+   - wait for user interaction
