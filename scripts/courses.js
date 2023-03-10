@@ -37,6 +37,7 @@ function handleOnLoad() {
     // ad the Fore! button
     const foreButton = document.createElement('button');
     foreButton.setAttribute('id', 'foreButton');
+    foreButton.setAttribute('onclick', "window.location.href='scorecard.html'");
     foreButton.disabled = true;
     foreButton.innerHTML = 'Fore!';
     document.body.appendChild(foreButton);
