@@ -7,20 +7,20 @@ const COURSES = [
     { id: 19002, name: 'Spanish Oaks' }
 ];
 
-window.onload = handleOnLoad;
+window.onload = pageMain;
 
 //////////////////////////
 // Function Definitions //
 //////////////////////////
-function handleOnLoad() {
+function pageMain() {
     const dropdown = document.createElement('select');
-    dropdown.onchange = handleDropdownOnChange;
+    dropdown.onchange = handleChangeDropdown;
 
     // add a prompt choice which can't be selected
     const promptElement = document.createElement('option');
-    promptElement.setAttribute('value', '');
-    promptElement.setAttribute('disabled', 'true');
-    promptElement.setAttribute('selected', 'true');
+    // promptElement.setAttribute('value', '');
+    promptElement.disabled = true;
+    promptElement.selected = true;
     promptElement.innerHTML = 'Select a course:';
     dropdown.appendChild(promptElement);
 
@@ -36,15 +36,22 @@ function handleOnLoad() {
 
     // ad the Fore! button
     const foreButton = document.createElement('button');
-    foreButton.setAttribute('id', 'foreButton');
-    foreButton.setAttribute('onclick', "window.location.href='scorecard.html'");
+    foreButton.id = 'foreButton';
+    foreButton.onclick = handleButtonClick;
     foreButton.disabled = true;
     foreButton.innerHTML = 'Fore!';
     document.body.appendChild(foreButton);
 }
 
-function handleDropdownOnChange() {
+function handleChangeDropdown() {
     document.getElementById('foreButton').disabled = false;
+}
+
+function handleButtonClick() {
+    const elDropdown = document.querySelector('select');
+    const courseID = elDropdown.options[elDropdown.selectedIndex].id;
+    const urlTarget = `scorecard.html?courseID=${courseID}`;
+    window.location.href = urlTarget;
 }
 
 // This works
