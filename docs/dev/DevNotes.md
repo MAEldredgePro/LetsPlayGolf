@@ -64,3 +64,8 @@ User opens the app
    - save object to persistent storage
    - render page
    - wait for user interaction
+
+
+https://maeldredgepro.github.io/LetsPlayGolf/courses/course11819.txt
+https://maeldredgepro.github.io/LetsPlayGolf/courses/course18300.txt
+https://maeldredgepro.github.io/LetsPlayGolf/courses/course19002.txt
