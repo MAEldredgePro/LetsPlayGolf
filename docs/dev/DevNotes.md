@@ -1,24 +1,25 @@
 # Let's Play Golf! Developer Notes
 
-## Dev Plan
+## Dev Strategy
  - Develop against phone screen dimensions - use Chrome dev tools to display
 my app/web page on a phone-like screen.
- - Develop for landscape orientation first
+ - Develop for landscape orientation first (probably only)
  - Create the following pages:
-   - [ ] Welcome/splash
-   - [ ] Course selection
-     - [ ] dropdown populated with three predefined courses
-   - [ ] Scorecard
-     - [ ] 18 holes, in and out
-     - [ ] up to four players
-       - [ ] only render lines for number of active players
-     - [ ] auto computed running total score
-     - [ ] (opt) red/green for over/under par?
-   - [ ] End game? Celebrate?
-   - [ ] (opt) view previous games
+   - Welcome/splash
+   - Course Selection
+   - Player Entry - up to 4 players
+   - Tee Selection
+   - Scorecard (main page, where the game happens)
+     - 18 holes (9 out, 9 in)
+     - Up to four players
+       - only render lines for number of active players
+     - auto computed running out, in, and total scores
+     - (opt) red/green for over/under par?
+   - End game? Celebrate?
+   - (opt) view previous games
 
  ## Tasks
- - [x] Download a golf scorecard to use as a model/mock
+ - [x] Download a real golf scorecard to use as a model/mock
  - [ ] Figure out the main flow of the program.
    - [x] Walk through from user's POV
    - [ ] Walk through from software flow POV
@@ -31,8 +32,9 @@ User opens the app
    - Only if there is not a game in progress
    - User should not have to dismiss, it should go away on its own
    - User should be able to dismiss before it times out
- - If there is a saved game (max 1)
+ - If there is a saved game in progress (max 1)
    - Load up the saved game and display the score card
+   - Wait for the next score to be entered
  - If there is not a saved game
    - Present course selection screen and wait.
 
