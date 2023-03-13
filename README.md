@@ -3,28 +3,24 @@ A mobile-friendly golf score keeping app
 
 ---
 ## Requirements
- - [ ] (4pt) Create the main scoring table with columns for each
-   - [ ] hole,
-   - [ ] out score,
-   - [ ] in score, and
-   - [ ] total score.
  - [ ] (2pt) Use the golf data API to bring in the data for the golf course(s).
- - [ ] (5pt) Create a row that loads
-   - [ ] yardage,
-   - [ ] handicap, and
-   - [ ] par
-     - [ ] for each hole
-   - [ ] from the course data and displays it in the table.
-   - [ ] The row should have a "total" column for the sum of all 18 holes.
- - [ ] (4pt) Create a row to keep track of a player's score.
-   - [ ] This row should allow users to enter their
-     - [ ] name and a
-     - [ ] score
-       - [ ] for each hole.
-   - [ ]  When a user types in a score for a hole, the
-     - [ ]  out,
-     - [ ]  in, and
-     - [ ]  total columns should update
+ - [ ] (4pt) Create the main scoring table with the following columns:
+   - [ ] col for row name (Hole, Yardage, Par, Handicap, PlayerName)
+   - [ ] cols for holes 1-9
+   - [ ] col for 'out' totals
+   - [ ] cols for holes 10-18
+   - [ ] col for 'in' totals
+   - [ ] col for course totals
+ - [ ] (5pt) Create the following rows and populate from course data:
+   - [ ] hole number
+   - [ ] hole yardage
+   - [ ] hole par
+   - [ ] hole handicap
+ - [ ] (4pt) Create a row for each player to to keep track of their per-hole and
+cumulative scores.
+   - [ ] This row should allow users to enter their name and a per-hole score.
+   - [ ] When a user enters a score for a hole, the 'out', 'in', and course
+total columns should update automatically.
  - [ ] (3pt) Add some CSS to style the card to look like an actual golf card.
  - [ ] (5pt) Allow users to select which tee they will be using
 (Men's, Women's, Pro, Amateur, etc.). All players will play from the same tee.
@@ -38,6 +34,7 @@ from the api. The scorecard will show the new golf course information
 and lines you specifically applied ES6 Modules
 ---
 ## Development Plan
+### I - Course Selection
  - [ ] download course data
    - [ ] can't download list of courses so we'll have to be satisfied with the
 static set of courses outlined in the assignment description
@@ -52,4 +49,12 @@ static set of courses outlined in the assignment description
        - http://uxcobra.com/golfapi/course19002.txt
  - [x] populate course picker dropdown
  - [x] Fore! button opens the scorecard page
- - [ ] pass course ID to scorecard page on open
+   - [ ] pass course ID to scorecard page on open
+### II - Player Selection
+ - [ ] Input from 1 to 4 players
+### III - Tee Selection
+### IV - Scorekeeping
+ - [ ] Choose to play front, back, or both in either order?
+ - [ ] Iterate holes
+   - [ ] Iterate players
+   - [ ] Keep running totals
