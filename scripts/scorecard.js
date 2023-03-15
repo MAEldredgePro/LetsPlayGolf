@@ -17,12 +17,9 @@ function pageMain() {
 }
 
 function fetchCourseInfo(courseID) {
-    const courseInfoURL = `http://uscobra.com/golfapi/course${courseID}.txt`;
+    const courseInfoURL = `https://maeldredgepro.github.io/LetsPlayGolf/data/course${courseID}.txt`;
 
-    const response = fetch(courseInfoURL).then((JSONres) => {
-        return JSONres.json();
-    }).then((res) => {
-        console.log(res);
-        return res;
-    })
+    fetch(courseInfoURL)
+        .then((response) => response.json())
+        .then(json => console.log(json));
 }

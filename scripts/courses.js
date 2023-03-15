@@ -1,50 +1,78 @@
 /////////////
 // Globals //
 /////////////
-const COURSES = [
-    { id: 11819, name: 'Thanksgiving Point' },
-    { id: 18300, name: 'Fox Hollow' },
-    { id: 19002, name: 'Spanish Oaks' }
-];
 
-window.onload = pageMain;
+window.onload = fetchCourses;
+
+// const COURSES = await getCourseInfo();
 
 //////////////////////////
 // Function Definitions //
 //////////////////////////
-function pageMain() {
+function fetchCourses() {
+    // launch a promise to fetch the course list.  When complete, it will
+    // call back a function to render the course picker.
+    fetch('https://maeldredgepro.github.io/LetsPlayGolf/data/courses.json')
+        // fetch('https://reqbin.com/echo/get/json')
+        .then(response => response.json())
+        // .then(response => response.text())
+        // .then(response => console.log(JSON.stringify(response)));
+        // .then(json => console.log(json));
+        .then(json => renderCoursePage(json));
+}
+
+function renderCoursePage(courses) {
+    renderCoursePicker(courses);
+    renderNextButton();
+}
+
+function renderCoursePicker(courses) {
     const dropdown = document.createElement('select');
     dropdown.onchange = handleChangeDropdown;
 
-    // add a prompt choice which can't be selected
+    // add a 'prompt' choice which can't be selected
     const promptElement = document.createElement('option');
-    // promptElement.setAttribute('value', '');
+    promptElement.innerHTML = 'Select a course:';
     promptElement.disabled = true;
     promptElement.selected = true;
-    promptElement.innerHTML = 'Select a course:';
     dropdown.appendChild(promptElement);
 
     // add the course choices
-    COURSES.forEach(course => {
+    courses.forEach(course => {
         const courseElement = document.createElement('option');
         courseElement.setAttribute('id', course.id);
         courseElement.innerHTML = course.name;
         dropdown.appendChild(courseElement);
     })
 
+    // Finished creating the dropdown.  Add it to the page.
     document.body.appendChild(dropdown);
-
-    // ad the Fore! button
-    const foreButton = document.createElement('button');
-    foreButton.id = 'foreButton';
-    foreButton.onclick = handleButtonClick;
-    foreButton.disabled = true;
-    foreButton.innerHTML = 'Fore!';
-    document.body.appendChild(foreButton);
 }
 
+function renderNextButton() {
+    // Add the Next button
+    const button = document.createElement('button');
+    button.id = 'nextButton';
+    button.onclick = handleButtonClick;
+    button.disabled = true;
+    button.innerHTML = 'Next';
+
+    // Finished creating the Next button.  Add it to the page.
+    document.body.appendChild(button);
+}
+
+// async function getCourseInfo(courseID) {
+//     try {
+//         // const res = await fetch(`https://maeldredgepro.github.io/LetsPlayGolf/courses/course${courseID}.txt`);
+//         const res = await fetch(`http://uxcobra.com/golfapi/course11819.txt`);
+//         return await res.json();
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
+
 function handleChangeDropdown() {
-    document.getElementById('foreButton').disabled = false;
+    document.getElementById('nextButton').disabled = false;
 }
 
 function handleButtonClick() {
@@ -54,29 +82,29 @@ function handleButtonClick() {
     window.location.href = urlTarget;
 }
 
-// This works
-function test() {
-    const response = fetch('http://uxcobra.com/golfapi/course11819.txt').then((JSONres) => {
-        return JSONres.json();
-    }).then((res) => {
-        console.log(res);
-    })
-}
+// // This works
+// function test() {
+//     const response = fetch('http://uxcobra.com/golfapi/course11819.txt').then((JSONres) => {
+//         return JSONres.json();
+//     }).then((res) => {
+//         console.log(res);
+//     })
+// }
 
 
-function getAvailableCourses() {
-    return fetch('https://golf-courses-api.herokuapp.com/courses/').then(
-        function (response) {
-            return response.json();
-        }
-    );
-}
+// function getAvailableCourses() {
+//     return fetch('https://golf-courses-api.herokuapp.com/courses/').then(
+//         function (response) {
+//             return response.json();
+//         }
+//     );
+// }
 
-// doesn't work
-function testCourses() {
-    const response = fetch('https://golf-courses-api.herokuapp.com/courses/').then((JSONres) => {
-        return JSONres.json();
-    }).then((res) => {
-        console.log(res);
-    })
-}
+// // doesn't work
+// function testCourses() {
+//     const response = fetch('https://golf-courses-api.herokuapp.com/courses/').then((JSONres) => {
+//         return JSONres.json();
+//     }).then((res) => {
+//         console.log(res);
+//     })
+// }
