@@ -4,8 +4,6 @@
 
 window.onload = fetchCourses;
 
-// const COURSES = await getCourseInfo();
-
 //////////////////////////
 // Function Definitions //
 //////////////////////////
@@ -13,11 +11,7 @@ function fetchCourses() {
     // launch a promise to fetch the course list.  When complete, it will
     // call back a function to render the course picker.
     fetch('https://maeldredgepro.github.io/LetsPlayGolf/data/courses.json')
-        // fetch('https://reqbin.com/echo/get/json')
         .then(response => response.json())
-        // .then(response => response.text())
-        // .then(response => console.log(JSON.stringify(response)));
-        // .then(json => console.log(json));
         .then(json => renderCoursePage(json));
 }
 
@@ -53,7 +47,7 @@ function renderNextButton() {
     // Add the Next button
     const button = document.createElement('button');
     button.id = 'nextButton';
-    button.onclick = handleButtonClick;
+    button.onclick = handleClickButton;
     button.disabled = true;
     button.innerHTML = 'Next';
 
@@ -61,50 +55,13 @@ function renderNextButton() {
     document.body.appendChild(button);
 }
 
-// async function getCourseInfo(courseID) {
-//     try {
-//         // const res = await fetch(`https://maeldredgepro.github.io/LetsPlayGolf/courses/course${courseID}.txt`);
-//         const res = await fetch(`http://uxcobra.com/golfapi/course11819.txt`);
-//         return await res.json();
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
-
 function handleChangeDropdown() {
     document.getElementById('nextButton').disabled = false;
 }
 
-function handleButtonClick() {
+function handleClickButton() {
     const elDropdown = document.querySelector('select');
     const courseID = elDropdown.options[elDropdown.selectedIndex].id;
     const urlTarget = `scorecard.html?courseID=${courseID}`;
     window.location.href = urlTarget;
 }
-
-// // This works
-// function test() {
-//     const response = fetch('http://uxcobra.com/golfapi/course11819.txt').then((JSONres) => {
-//         return JSONres.json();
-//     }).then((res) => {
-//         console.log(res);
-//     })
-// }
-
-
-// function getAvailableCourses() {
-//     return fetch('https://golf-courses-api.herokuapp.com/courses/').then(
-//         function (response) {
-//             return response.json();
-//         }
-//     );
-// }
-
-// // doesn't work
-// function testCourses() {
-//     const response = fetch('https://golf-courses-api.herokuapp.com/courses/').then((JSONres) => {
-//         return JSONres.json();
-//     }).then((res) => {
-//         console.log(res);
-//     })
-// }
