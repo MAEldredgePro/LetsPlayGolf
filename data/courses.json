@@ -1,14 +1,14 @@
 [
     {
-        "id": 11819,
-        "name": "Thanksgiving Point"
-    },
-    {
         "id": 18300,
         "name": "Fox Hollow"
     },
     {
         "id": 19002,
         "name": "Spanish Oaks"
+    },
+    {
+        "id": 11819,
+        "name": "Thanksgiving Point"
     }
 ]

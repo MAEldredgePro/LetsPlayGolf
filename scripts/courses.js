@@ -12,10 +12,10 @@ function fetchCourses() {
     // call back a function to render the course picker.
     fetch('https://maeldredgepro.github.io/LetsPlayGolf/data/courses.json')
         .then(response => response.json())
-        .then(json => renderCoursePage(json));
+        .then(json => renderPage(json));
 }
 
-function renderCoursePage(courses) {
+function renderPage(courses) {
     renderCoursePicker(courses);
     renderNextButton();
 }
