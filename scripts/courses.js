@@ -20,14 +20,15 @@ function fetchCourses() {
     // call back a function to render the course picker.
     fetch(COURSES_URL)
         .then(response => response.json())
-        .then(courses => renderCourseDropdown(courses));
-    // .then(courses => renderPage(courses));
+        // .then(courses => renderCourseDropdown(courses));
+        .then(courses => renderPage(courses));
 }
 
-// function renderPage(courses) {
-//     renderCourseDropdown(courses);
-//     // renderNextButton();
-// }
+function renderPage(courses) {
+
+    renderCourseDropdown(courses);
+    // renderNextButton();
+}
 
 function renderCourseDropdown(courses) {
     const dropdown = document.createElement('select');
@@ -76,38 +77,62 @@ function fetchCourseInfo(courseID) {
         .then(courseInfo => renderCourseInfo(courseInfo));
 }
 
-function renderCourseInfo(courseInfo) {
-    // create the container div for the course info
-    const courseInfoTable = newElement('table', 'courseInfo');
-    document.body.appendChild(courseInfoTable);
-
-    // Create the table data as an array of columns.
-    // We will populate the table array data by column because that's the
-    //  way the data is supplied.
-    // We will then traverse the table data by row because that's the way the
-    // html likes to be written.
-
-    const tableData = [];
+function renderCourseInfo(courseInfoIn) {
+    class TeeBoxOut {
+        constructor(yards, par, handicap) {
+            this.yards = yards;
+            this.par = par;
+            this.handicap = handicap;
+        }
+    }
 
     // console.log(courseInfo.data.holes);
-    const holesInfo = courseInfo.data.holes;
-    holesInfo.forEach(holeInfo => {
-        // populate the column
-        // const holeInfoDiv = newElement();
-        // courseInfoDiv.appendChild(holeInfoDiv);
-        // holeInfoDiv.innerHTML = holeInfo.hole;
+    const holesInfoIn = courseInfoIn.data.holes;
 
-        const column = [];
-        tableData.push(column);
+    // initialize the tee box row groups
+    console.log(holesInfoIn[0].teeBoxes.length);
+    const teeBoxRowsOut = [];
+    holesInfoIn[0].teeBoxes.forEach(teeBoxIn => {
+        teeBoxRowsOut.push([]);
+    })
 
-        // add all the row items to the column
-        column.push(holeInfo.hole);
-        // ...
-
-        // console.log(holeInfo.hole)
+    holesInfoIn.forEach(holeInfoIn => {
+        holeInfoIn.teeBoxes.forEach((teeBoxIn, index) => {
+            const teeBoxOut = new TeeBoxOut(teeBoxIn.yards, teeBoxIn.par, teeBoxIn.hcp);
+            teeBoxRowsOut[index].push(teeBoxOut);
+        })
     });
 
+    console.log(teeBoxRowsOut);
 
+    // acquire or create the table for the course info
+    const courseInfoTable = document.querySelector('table') || newElement('table', 'courseInfo');
+    courseInfoTable.innerHTML = '';
+
+    // render the table header row with the hole numbers
+    tableHeaderRow = newElement('tr');
+    holesInfoIn.forEach((holeInfoIn, index) => {
+        const tableHeaderData = newElement('th');
+        tableHeaderData.innerHTML = holeInfoIn.hole;
+        tableHeaderRow.appendChild(tableHeaderData);
+    })
+
+    courseInfoTable.appendChild(tableHeaderRow);
+
+    // render the tee box info
+    teeBoxRowsOut.forEach(teeBoxRowOut => {
+        const tableRow = newElement('tr');
+        courseInfoTable.appendChild(tableRow);
+
+        teeBoxRowOut.forEach(teeBoxOut => {
+            const tableData = newElement('td');
+            tableData.innerHTML = teeBoxOut.yards;
+            tableRow.appendChild(tableData);
+        })
+    })
+
+    // Add the completed table to the page body.
+    document.body.appendChild(courseInfoTable);
 }
 
 function newElement(tag, classAttr = null) {
