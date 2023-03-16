@@ -1,4 +1,9 @@
 body {
   background-color: pink;
   margin: 0;
+}
+
+td {
+  background-color: white;
+  text-align: right;
 }/*# sourceMappingURL=courses.css.map */
