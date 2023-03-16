@@ -66,7 +66,7 @@ function fetchCourseInfo(courseID) {
 
 function renderCourseData(holesData) {
     class TeeBoxInfo {
-        static rowLabels = [
+        static datumLabels = [
             'Yards',
             'Par',
             'HCP',
@@ -80,7 +80,7 @@ function renderCourseData(holesData) {
             this.teeType = teeBoxData.teeType;
         }
 
-        GetRowInfo(selector) {
+        GetDatum(selector) {
             switch (selector) {
                 case 0: return (this.yards);
                 case 1: return (this.par);
@@ -91,6 +91,38 @@ function renderCourseData(holesData) {
     }
 
     console.log(`holesData.length: ${holesData.length}`);
+
+    // Iterate the holes 1-18. This is a column-wise iteration which does
+    // not lend itself well to creating HTML as-you-go (which is row-wise)
+    // so we have to build something in-memory that we can traverse row-wise.
+    const infoGrid = [];
+    holesData.forEach((holeData, holeIndex) => {
+        // Iterate the tee box data for this hole.  Each tee box constitutes
+        // a row group, since there are multiple data points we are interested
+        // in per tee box.
+        holeData.teeBoxes.forEach((teeBoxData, teeBoxIndex) => {
+            const teeBoxInfo = new TeeBoxInfo(teeBoxData);
+            // Iterate through the data points in the tee box we are interested in
+            TeeBoxInfo.datumLabels.forEach((datumLabel, datumSelector) => {
+                const colNumber = holeIndex;
+                const rowNumber = (teeBoxIndex * TeeBoxInfo.datumLabels.length) + datumSelector;
+
+                // Add another column if we need to
+                if (infoGrid.length <= colNumber) {
+                    infoGrid.push([]);
+                }
+
+                // // add another row if we have to
+                // if (infoGrid[colNumber].length <= rowNumber) {
+                //     infoGrid[colNumber].push([]);
+                // }
+
+                // create the datum
+                const tableDatum = teeBoxInfo.GetDatum(datumSelector);
+                infoGrid[colNumber].push(tableDatum);
+            })
+        })
+    })
 
     // // initialize the tee box row groups
     // console.log(`holesInfoIn[0].teeBoxes.length: ${holesData[0].teeBoxes.length}`);
@@ -121,7 +153,7 @@ function renderCourseData(holesData) {
 
     // Create an array of empty table row objects
     // that we will fill out later
-    const tableDataRows = [];
+    // const tableDataRows = [];
 
     // // each tee box row group
     // teeBoxRowGroups.forEach(teeBoxRowGroupOut => {
