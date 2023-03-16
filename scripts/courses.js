@@ -105,17 +105,11 @@ function renderCourseData(holesData) {
             // Iterate through the data points in the tee box we are interested in
             TeeBoxInfo.datumLabels.forEach((datumLabel, datumSelector) => {
                 const colNumber = holeIndex;
-                const rowNumber = (teeBoxIndex * TeeBoxInfo.datumLabels.length) + datumSelector;
 
                 // Add another column if we need to
                 if (infoGrid.length <= colNumber) {
                     infoGrid.push([]);
                 }
-
-                // // add another row if we have to
-                // if (infoGrid[colNumber].length <= rowNumber) {
-                //     infoGrid[colNumber].push([]);
-                // }
 
                 // create the datum
                 const tableDatum = teeBoxInfo.GetDatum(datumSelector);
@@ -124,66 +118,9 @@ function renderCourseData(holesData) {
         })
     })
 
-    // // initialize the tee box row groups
-    // console.log(`holesInfoIn[0].teeBoxes.length: ${holesData[0].teeBoxes.length}`);
-    // const teeBoxRowGroups = [];
-    // holesData[0].teeBoxes.forEach(teeBoxIn => {
-    //     teeBoxRowGroups.push([]);
-    // })
-
-    // let teeBoxCount = 0;
-
-    // holesData.forEach(holeInfoIn => {
-    //     holeInfoIn.teeBoxes.forEach((teeBoxIn, index) => {
-    //         const teeBoxOut = new TeeBoxInfo(teeBoxIn);
-    //         teeBoxRowGroups[index].push(teeBoxOut);
-    //         ++teeBoxCount;
-    //     })
-    // });
-
-    // console.log(`teeBoxRowGroupsOut.length: ${teeBoxRowGroups.length}`);
-    // console.log(`teeBoxRowGroupsOut[0]: ${teeBoxRowGroups[0]}`);
-    // console.log(`teeBoxRowGroupsOut[0].length: ${teeBoxRowGroups[0].length}`);
-    // console.log(`teeBoxRowGroupsOut[0][0]: ${teeBoxRowGroups[0][0]}`);
-    // console.log(`teeBoxCount: ${teeBoxCount}`);
-
     ////////////////////////////////
     // Assemble the tee box info. //
     ////////////////////////////////
-
-    // Create an array of empty table row objects
-    // that we will fill out later
-    // const tableDataRows = [];
-
-    // // each tee box row group
-    // teeBoxRowGroups.forEach(teeBoxRowGroupOut => {
-    //     TeeBoxInfo.rowLabels.forEach(rowLabel => {
-    //         tableDataRows.push(newElement('tr'));
-    //     })
-    // })
-
-    // // render the tee box rows
-    // teeBoxRowGroups.forEach((teeBoxRowGroupOut, index) => {
-    //     if (index === 0) {
-    //         // add the tee type label
-    //         const tableRowLabel = newElement('td');
-    //         tableRowLabel.setAttribute('rowspan', '3');
-    //         tableDataRows[index].appendChild(tableRowLabel);
-    //         tableRowLabel.innerHTML = 'teeType';
-    //         console.log(index);
-    //     }
-
-    //     // Render the label
-    //     const tableRowLabel = newElement('td');
-    //     // tableRow.appendChild(tableRowLabel);
-    //     // tableRowLabel.innerHTML = TeeBoxOut.GetDataLabel(index);
-
-    //     teeBoxRowGroupOut.forEach(teeBoxOut => {
-    //         const tableData = newElement('td');
-    //         tableData.innerHTML = teeBoxOut.GetData(index);
-    //         // tableRow.appendChild(tableData);
-    //     })
-    // })
 
     // Create the table header row.
     tableHeaderRow = createCourseInfoTableHeaderRow(holesData.length);
@@ -212,34 +149,6 @@ function installCourseInfoTable(newCourseInfoTable) {
         document.body.appendChild(newCourseInfoTable);
     }
 }
-
-// function acquireCourseInfoTable(create = true) {
-//     const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO) ||
-//         create ?  : null;
-
-//     if (courseInfoTable && create) {
-//         document.body.appendChild(courseInfoTable);
-//     }
-
-//     return courseInfoTable;
-// }
-
-// function removeCourseInfoTable() {
-//     const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
-//     if (courseInfoTable) {
-//         courseInfoTable.remove();
-//     }
-
-//     //
-//     // This doesn't work. Probably because of something to do with
-//     // references idk.
-//     //
-//     // const courseInfoTable = acquireCourseInfoTable(false);
-//     // if (courseInfoTable) {
-//     //     courseInfoTable.remove();
-//     //     // document.body.removeChild(courseInfoTable) :
-//     // }
-// }
 
 function createCourseInfoTableHeaderRow(numHoles) {
     const tableHeaderRow = newElement('tr');
@@ -274,14 +183,3 @@ function newElement(tag, classAttr = null) {
 
     return element;
 }
-
-// function handleChangeDropdown() {
-//     document.getElementById('nextButton').disabled = false;
-// }
-
-// function handleClickButton() {
-//     const elDropdown = document.querySelector('select');
-//     const courseID = elDropdown.options[elDropdown.selectedIndex].id;
-//     const urlTarget = `scorecard.html?courseID=${courseID}`;
-//     window.location.href = urlTarget;
-// }
