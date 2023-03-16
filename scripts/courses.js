@@ -65,6 +65,30 @@ function fetchCourseInfo(courseID) {
 }
 
 function renderCourseData(holesData) {
+    // console.log(`holesData.length: ${holesData.length}`);
+
+    // Iterate the holes 1-18. This is a column-wise iteration which does
+    // not lend itself well to creating HTML as-you-go (which is row-wise)
+    // so we have to build something in-memory that we can traverse row-wise.
+    const infoGrid = generateInfoGrid(holesData);
+
+    ////////////////////////////////
+    // Assemble the tee box info. //
+    ////////////////////////////////
+
+    // Create the table header row.
+    tableHeaderRow = createCourseInfoTableHeaderRow(holesData.length);
+
+    const courseInfoTable = createCourseInfoTable();
+
+    // Assemble the table;
+    courseInfoTable.appendChild(tableHeaderRow);
+
+    // Drop in the new course info table.
+    installCourseInfoTable(courseInfoTable);
+}
+
+function generateInfoGrid(holesData) {
     class TeeBoxInfo {
         static datumLabels = [
             'Yards',
@@ -90,12 +114,8 @@ function renderCourseData(holesData) {
         }
     }
 
-    console.log(`holesData.length: ${holesData.length}`);
-
-    // Iterate the holes 1-18. This is a column-wise iteration which does
-    // not lend itself well to creating HTML as-you-go (which is row-wise)
-    // so we have to build something in-memory that we can traverse row-wise.
     const infoGrid = [];
+
     holesData.forEach((holeData, holeIndex) => {
         // Iterate the tee box data for this hole.  Each tee box constitutes
         // a row group, since there are multiple data points we are interested
@@ -118,20 +138,7 @@ function renderCourseData(holesData) {
         })
     })
 
-    ////////////////////////////////
-    // Assemble the tee box info. //
-    ////////////////////////////////
-
-    // Create the table header row.
-    tableHeaderRow = createCourseInfoTableHeaderRow(holesData.length);
-
-    const courseInfoTable = createCourseInfoTable();
-
-    // Assemble the table;
-    courseInfoTable.appendChild(tableHeaderRow);
-
-    // Drop in the new course info table.
-    installCourseInfoTable(courseInfoTable);
+    return infoGrid;
 }
 
 function createCourseInfoTable() {
