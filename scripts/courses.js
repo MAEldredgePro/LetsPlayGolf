@@ -4,100 +4,83 @@
 const CLS_COURSE_INFO = 'course-info';
 const CLS_SEL_COURSE_INFO = `.${CLS_COURSE_INFO}`;
 
-const COURSES_URL =
+const COURSE_LIST_URL =
     'https://maeldredgepro.github.io/LetsPlayGolf/data/courses.json';
 
-function courseInfoURL(courseID) {
+function courseDataURL(courseID) {
     return 'https://maeldredgepro.github.io/LetsPlayGolf/data/course'
         + courseID
         + '.txt';
 }
 
-window.onload = fetchCourses;
+window.onload = fetchCourseList;
 
 //////////////////////////
 // Function Definitions //
 //////////////////////////
-function fetchCourses() {
+function fetchCourseList() {
     // launch a promise to fetch the course list.  When complete, it will
-    // call back a function to render the course picker.
-    fetch(COURSES_URL)
+    // call back a function to render the course selection page.
+    fetch(COURSE_LIST_URL)
         .then(response => response.json())
-        // .then(courses => renderCourseDropdown(courses));
-        .then(courses => renderPage(courses));
+        .then(courseList => renderCourseSelectionPage(courseList));
 }
 
-function renderPage(courses) {
+function renderCourseSelectionPage(courses) {
+    const courseSelect = newElement('select');
 
-    renderCourseDropdown(courses);
-    // renderNextButton();
-}
+    // Add a 'prompt' option which can't be selected,
+    // but will prompt the user to make a course selection.
+    const promptOption = newElement('option');
+    promptOption.selected = true;
+    promptOption.disabled = true;
+    promptOption.innerHTML = 'Select a course:';
+    courseSelect.appendChild(promptOption);
 
-function renderCourseDropdown(courses) {
-    const dropdown = document.createElement('select');
-    dropdown.addEventListener('change', handleChangeDropdown);
-
-    // add a 'prompt' choice which can't be selected
-    const promptElement = document.createElement('option');
-    promptElement.innerHTML = 'Select a course:';
-    promptElement.disabled = true;
-    promptElement.selected = true;
-    dropdown.appendChild(promptElement);
-
-    // add the course choices
+    // Add the available course options.
     courses.forEach(course => {
-        const courseElement = document.createElement('option');
-        courseElement.setAttribute('id', course.id);
-        courseElement.innerHTML = course.name;
-        dropdown.appendChild(courseElement);
+        const courseOption = newElement('option');
+        courseOption.setAttribute('id', course.id);
+        courseOption.innerHTML = course.name;
+        courseSelect.appendChild(courseOption);
     })
 
-    // Finished creating the dropdown.  Add it to the page.
-    document.body.appendChild(dropdown);
+    // Finished creating the course select dropdown.
+    // Add its event listener and add it to the page.
+    courseSelect.addEventListener('change', handleChangeCourseSelect);
+    document.body.appendChild(courseSelect);
 }
 
-// function renderNextButton() {
-//     // Add the Next button
-//     const button = document.createElement('button');
-//     button.id = 'nextButton';
-//     button.onclick = handleClickButton;
-//     button.disabled = true;
-//     button.innerHTML = 'Next';
-
-//     // Finished creating the Next button.  Add it to the page.
-//     document.body.appendChild(button);
-// }
-
-function handleChangeDropdown(event) {
-    removeCourseInfoTable();
-    const elDropdown = event.target;
-    const courseID = elDropdown[elDropdown.selectedIndex].id;
+function handleChangeCourseSelect(event) {
+    const courseSelect = event.target;
+    const courseID = courseSelect[courseSelect.selectedIndex].id;
     fetchCourseInfo(courseID);
+    // The fetch registers a callback that will render the course info.
 }
 
 function fetchCourseInfo(courseID) {
-    fetch(courseInfoURL(courseID))
+    fetch(courseDataURL(courseID))
         .then(response => response.json())
-        .then(courseInfo => renderCourseInfo(courseInfo));
+        .then(courseData => renderCourseData(courseData.data.holes));
 }
 
-function renderCourseInfo(courseInfoIn) {
-    class TeeBoxOut {
+function renderCourseData(holesData) {
+    class TeeBoxInfo {
         static rowLabels = [
             'Yards',
             'Par',
             'HCP',
         ];
 
-        constructor(teeBoxIn) {
-            this.hole = teeBoxIn.hole;
-            this.yards = teeBoxIn.yards;
-            this.par = teeBoxIn.par;
-            this.hcp = teeBoxIn.hcp;
-            this.teeType = teeBoxIn.teeType;
+        constructor(teeBoxData) {
+            this.hole = teeBoxData.hole;
+            this.yards = teeBoxData.yards;
+            this.par = teeBoxData.par;
+            this.hcp = teeBoxData.hcp;
+            this.teeType = teeBoxData.teeType;
         }
 
-        GetData(selector) {
+        GetRowInfo(selector) {
             switch (selector) {
                 case 0: return (this.yards);
                 case 1: return (this.par);
@@ -107,109 +90,124 @@ function renderCourseInfo(courseInfoIn) {
         }
     }
 
-    // console.log(`courseInfoIn num holes: ${courseInfoIn.data.holes.length}`);
-    const holesInfoIn = courseInfoIn.data.holes;
+    console.log(`holesData.length: ${holesData.length}`);
 
-    // initialize the tee box row groups
-    console.log(`holesInfoIn[0].teeBoxes.length: ${holesInfoIn[0].teeBoxes.length}`);
-    const teeBoxRowGroupsOut = [];
-    holesInfoIn[0].teeBoxes.forEach(teeBoxIn => {
-        teeBoxRowGroupsOut.push([]);
-    })
+    // // initialize the tee box row groups
+    // console.log(`holesInfoIn[0].teeBoxes.length: ${holesData[0].teeBoxes.length}`);
+    // const teeBoxRowGroups = [];
+    // holesData[0].teeBoxes.forEach(teeBoxIn => {
+    //     teeBoxRowGroups.push([]);
+    // })
 
-    let teeBoxCount = 0;
+    // let teeBoxCount = 0;
 
-    holesInfoIn.forEach(holeInfoIn => {
-        holeInfoIn.teeBoxes.forEach((teeBoxIn, index) => {
-            const teeBoxOut = new TeeBoxOut(teeBoxIn);
-            teeBoxRowGroupsOut[index].push(teeBoxOut);
-            ++teeBoxCount;
-        })
-    });
+    // holesData.forEach(holeInfoIn => {
+    //     holeInfoIn.teeBoxes.forEach((teeBoxIn, index) => {
+    //         const teeBoxOut = new TeeBoxInfo(teeBoxIn);
+    //         teeBoxRowGroups[index].push(teeBoxOut);
+    //         ++teeBoxCount;
+    //     })
+    // });
 
-    console.log(`teeBoxRowGroupsOut.length: ${teeBoxRowGroupsOut.length}`);
-    console.log(`teeBoxRowGroupsOut[0]: ${teeBoxRowGroupsOut[0]}`);
-    console.log(`teeBoxRowGroupsOut[0].length: ${teeBoxRowGroupsOut[0].length}`);
-    console.log(`teeBoxRowGroupsOut[0][0]: ${teeBoxRowGroupsOut[0][0]}`);
-    console.log(`teeBoxCount: ${teeBoxCount}`);
+    // console.log(`teeBoxRowGroupsOut.length: ${teeBoxRowGroups.length}`);
+    // console.log(`teeBoxRowGroupsOut[0]: ${teeBoxRowGroups[0]}`);
+    // console.log(`teeBoxRowGroupsOut[0].length: ${teeBoxRowGroups[0].length}`);
+    // console.log(`teeBoxRowGroupsOut[0][0]: ${teeBoxRowGroups[0][0]}`);
+    // console.log(`teeBoxCount: ${teeBoxCount}`);
 
-    // Remove the course info table.
-    removeCourseInfoTable();
+    ////////////////////////////////
+    // Assemble the tee box info. //
+    ////////////////////////////////
 
-    /////////////////////////////
-    // render the tee box info //
-    /////////////////////////////
-
-    // Create an array of empty row objects that we will fill out later
+    // Create an array of empty table row objects
+    // that we will fill out later
     const tableDataRows = [];
-    teeBoxRowGroupsOut.forEach(teeBoxRowGroupOut => {
-        TeeBoxOut.rowLabels.forEach(rowLabel => {
-            tableDataRows.push(newElement('tr'));
-        })
-    })
 
-    // render the tee box rows
-    teeBoxRowGroupsOut.forEach((teeBoxRowGroupOut, index) => {
-        if (index === 0) {
-            // add the tee type label
-            const tableRowLabel = newElement('td');
-            tableRowLabel.setAttribute('rowspan', '3');
-            tableDataRows[index].appendChild(tableRowLabel);
-            tableRowLabel.innerHTML = 'teeType';
-            console.log(index);
-        }
+    // // each tee box row group
+    // teeBoxRowGroups.forEach(teeBoxRowGroupOut => {
+    //     TeeBoxInfo.rowLabels.forEach(rowLabel => {
+    //         tableDataRows.push(newElement('tr'));
+    //     })
+    // })
 
-        // Render the label
-        const tableRowLabel = newElement('td');
-        // tableRow.appendChild(tableRowLabel);
-        // tableRowLabel.innerHTML = TeeBoxOut.GetDataLabel(index);
+    // // render the tee box rows
+    // teeBoxRowGroups.forEach((teeBoxRowGroupOut, index) => {
+    //     if (index === 0) {
+    //         // add the tee type label
+    //         const tableRowLabel = newElement('td');
+    //         tableRowLabel.setAttribute('rowspan', '3');
+    //         tableDataRows[index].appendChild(tableRowLabel);
+    //         tableRowLabel.innerHTML = 'teeType';
+    //         console.log(index);
+    //     }
 
-        teeBoxRowGroupOut.forEach(teeBoxOut => {
-            const tableData = newElement('td');
-            tableData.innerHTML = teeBoxOut.GetData(index);
-            // tableRow.appendChild(tableData);
-        })
-    })
+    //     // Render the label
+    //     const tableRowLabel = newElement('td');
+    //     // tableRow.appendChild(tableRowLabel);
+    //     // tableRowLabel.innerHTML = TeeBoxOut.GetDataLabel(index);
+
+    //     teeBoxRowGroupOut.forEach(teeBoxOut => {
+    //         const tableData = newElement('td');
+    //         tableData.innerHTML = teeBoxOut.GetData(index);
+    //         // tableRow.appendChild(tableData);
+    //     })
+    // })
 
     // Create the table header row.
-    tableHeaderRow = createCourseInfoTableHeaderRow(holesInfoIn.length);
+    tableHeaderRow = createCourseInfoTableHeaderRow(holesData.length);
 
-    const courseInfoTable = acquireCourseInfoTable();
+    const courseInfoTable = createCourseInfoTable();
 
     // Assemble the table;
     courseInfoTable.appendChild(tableHeaderRow);
 
-    // Add the completed table to the page body.
-    document.body.appendChild(courseInfoTable);
+    // Drop in the new course info table.
+    installCourseInfoTable(courseInfoTable);
 }
 
-function acquireCourseInfoTable(create = true) {
-    const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO) ||
-        create ? newElement('table', CLS_COURSE_INFO) : null;
+function createCourseInfoTable() {
+    return newElement('table', CLS_COURSE_INFO);
+}
 
-    if (courseInfoTable && create) {
-        document.body.appendChild(courseInfoTable);
+function installCourseInfoTable(newCourseInfoTable) {
+    // remove the old course info table
+    const oldCourseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
+    if (oldCourseInfoTable) {
+        oldCourseInfoTable.remove();
     }
 
-    return courseInfoTable;
-}
-
-function removeCourseInfoTable() {
-    const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
-    if (courseInfoTable) {
-        courseInfoTable.remove();
+    if (newCourseInfoTable) {
+        document.body.appendChild(newCourseInfoTable);
     }
-
-    //
-    // This doesn't work. Probably because of something to do with
-    // references idk.
-    //
-    // const courseInfoTable = acquireCourseInfoTable(false);
-    // if (courseInfoTable) {
-    //     courseInfoTable.remove();
-    //     // document.body.removeChild(courseInfoTable) :
-    // }
 }
+
+// function acquireCourseInfoTable(create = true) {
+//     const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO) ||
+//         create ?  : null;
+
+//     if (courseInfoTable && create) {
+//         document.body.appendChild(courseInfoTable);
+//     }
+
+//     return courseInfoTable;
+// }
+
+// function removeCourseInfoTable() {
+//     const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
+//     if (courseInfoTable) {
+//         courseInfoTable.remove();
+//     }
+
+//     //
+//     // This doesn't work. Probably because of something to do with
+//     // references idk.
+//     //
+//     // const courseInfoTable = acquireCourseInfoTable(false);
+//     // if (courseInfoTable) {
+//     //     courseInfoTable.remove();
+//     //     // document.body.removeChild(courseInfoTable) :
+//     // }
+// }
 
 function createCourseInfoTableHeaderRow(numHoles) {
     const tableHeaderRow = newElement('tr');
