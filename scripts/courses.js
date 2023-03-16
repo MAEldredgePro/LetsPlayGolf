@@ -15,6 +15,31 @@ function courseDataURL(courseID) {
 
 window.onload = fetchCourseList;
 
+class TeeBoxInfo {
+    static datumLabels = [
+        'Yards',
+        'Par',
+        'HCP',
+    ];
+
+    constructor(teeBoxData) {
+        this.hole = teeBoxData.hole;
+        this.yards = teeBoxData.yards;
+        this.par = teeBoxData.par;
+        this.hcp = teeBoxData.hcp;
+        this.teeType = teeBoxData.teeType;
+    }
+
+    GetDatum(selector) {
+        switch (selector) {
+            case 0: return (this.yards);
+            case 1: return (this.par);
+            case 2: return (this.hcp);
+            default: return null;
+        }
+    }
+}
+
 //////////////////////////
 // Function Definitions //
 //////////////////////////
@@ -72,48 +97,59 @@ function renderCourseData(holesData) {
     // so we have to build something in-memory that we can traverse row-wise.
     const infoGrid = generateInfoGrid(holesData);
 
+    const teeTypes = [];
+    holesData[0].teeBoxes.forEach(teeBox => {
+        teeTypes.push(teeBox.teeType);
+    })
+
     ////////////////////////////////
     // Assemble the tee box info. //
     ////////////////////////////////
 
-    // Create the table header row.
-    tableHeaderRow = createCourseInfoTableHeaderRow(holesData.length);
-
+    // Create the course info table.
     const courseInfoTable = createCourseInfoTable();
 
-    // Assemble the table;
+    // Create and add the table header row.
+    tableHeaderRow = createCourseInfoTableHeaderRow(holesData.length);
     courseInfoTable.appendChild(tableHeaderRow);
+
+    // Turn the infoGrid on its side and iterate the data.
+    const numRows = infoGrid[0].length;
+    for (let j = 0; j < numRows; ++j) {
+        const tableRow = newElement('tr');
+
+        const teeBoxNumData = TeeBoxInfo.datumLabels.length;
+        const teeBoxDatumSelector = j % teeBoxNumData;
+
+        if (0 == teeBoxDatumSelector) {
+            const teeType = teeTypes[Math.floor(j / teeBoxNumData)];
+
+            const teeTypeTableDatum = newElement('td');
+            teeTypeTableDatum.setAttribute('rowspan', teeBoxNumData);
+            teeTypeTableDatum.innerHTML = teeType;
+            tableRow.appendChild(teeTypeTableDatum);
+        }
+
+        const rowLabelTableDatum = newElement('td');
+        rowLabelTableDatum.innerHTML = TeeBoxInfo.datumLabels[teeBoxDatumSelector];
+        tableRow.appendChild(rowLabelTableDatum);
+
+        const numColumns = infoGrid.length;
+        for (let i = 0; i < numColumns; ++i) {
+            const tableDatum = newElement('td');
+            tableDatum.innerHTML = infoGrid[i][j];
+
+            tableRow.appendChild(tableDatum);
+        }
+
+        courseInfoTable.appendChild(tableRow);
+    }
 
     // Drop in the new course info table.
     installCourseInfoTable(courseInfoTable);
 }
 
 function generateInfoGrid(holesData) {
-    class TeeBoxInfo {
-        static datumLabels = [
-            'Yards',
-            'Par',
-            'HCP',
-        ];
-
-        constructor(teeBoxData) {
-            this.hole = teeBoxData.hole;
-            this.yards = teeBoxData.yards;
-            this.par = teeBoxData.par;
-            this.hcp = teeBoxData.hcp;
-            this.teeType = teeBoxData.teeType;
-        }
-
-        GetDatum(selector) {
-            switch (selector) {
-                case 0: return (this.yards);
-                case 1: return (this.par);
-                case 2: return (this.hcp);
-                default: return null;
-            }
-        }
-    }
-
     const infoGrid = [];
 
     holesData.forEach((holeData, holeIndex) => {
