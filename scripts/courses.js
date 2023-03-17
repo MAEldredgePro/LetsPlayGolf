@@ -68,7 +68,7 @@ function appendAddPlayerButton(courseInfoTable) {
     const addPlayerButton = newElement('button');
     addPlayerButton.innerText = 'Add a player';
     addPlayerButton.addEventListener('click', handleClickAddPlayerButton);
-    const addPlayerCell = newElement('td');
+    const addPlayerCell = newTableDatum();
     addPlayerCell.appendChild(addPlayerButton);
     const addPlayerRow = newElement('tr', CLS_CTRL_ROW);
     addPlayerRow.appendChild(addPlayerCell);
@@ -90,7 +90,7 @@ function appendPlayButton(courseInfoTable) {
     const playButton = newElement('button');
     playButton.innerText = 'Play Golf!';
     playButton.addEventListener('click', handleClickPlayButton);
-    const playButtonCell = newElement('td');
+    const playButtonCell = newTableDatum();
     playButtonCell.appendChild(playButton);
     const playButtonRow = newElement('tr', CLS_CTRL_ROW);
     playButtonRow.appendChild(playButtonCell);
@@ -199,6 +199,10 @@ function newElement(tag, classAttrValue = null) {
     return element;
 }
 
+function newTableDatum(classAttrValue = null) {
+    return newElement('td', classAttrValue);
+}
+
 function removeControlButtons(courseInfoTable) {
     while (courseInfoTable.lastChild.className === CLS_CTRL_ROW) {
         courseInfoTable.lastChild.remove();
@@ -243,7 +247,7 @@ function renderCourseData(holesData) {
             // console.log(`teeType: ${teeType}`);
             rowTeeType = teeType;
 
-            const teeTypeTableDatum = newElement('td');
+            const teeTypeTableDatum = newTableDatum();
             teeTypeTableDatum.setAttribute('rowspan', teeBoxNumData);
             const teeTypeSelectButton = newElement('button');
             teeTypeSelectButton.innerText = teeType;
@@ -253,15 +257,23 @@ function renderCourseData(holesData) {
             tableRow.appendChild(teeTypeTableDatum);
         }
 
-        const rowLabelTableDatum = newElement('td');
+        const rowLabelTableDatum = newTableDatum();
         rowLabelTableDatum.innerText = TeeBoxInfo.datumLabels[teeBoxDatumSelector];
         tableRow.appendChild(rowLabelTableDatum);
 
+        let halfGameTotal;
+        let halfGameTotalTableDatum;
         let rowTotal = 0;
         const numColumns = infoGrid.length;
         for (let i = 0; i < numColumns; ++i) {
+            // Halfway through iterating the columns, add the 'Out' column
+            if (halfGameTotalTableDatum && (i >= numColumns / 2)) {
+                halfGameTotal = rowTotal;
+                halfGameTotalTableDatum = newTableDatum();
+            }
+
             // Create the table cell and fill it
-            const tableDatum = newElement('td');
+            const tableDatum = newTableDatum();
             tableDatum.innerText = infoGrid[i][j];
             tableRow.appendChild(tableDatum);
 
@@ -270,7 +282,7 @@ function renderCourseData(holesData) {
         }
 
         // Add a total cell at the end of the row
-        const tableDatum = newElement('td');
+        const tableDatum = newTableDatum();
         tableDatum.innerText = rowTotal;
         tableRow.appendChild(tableDatum);
 
@@ -341,7 +353,7 @@ function handleClickAddPlayerButton(event) {
     removeControlButtons(courseInfoTable);
 
     // Add the new player.
-    const newPlayerCell = newElement('td');
+    const newPlayerCell = newTableDatum();
     newPlayerCell.setAttribute('colspan', 2);
     newPlayerCell.style.textAlign = 'center';
     newPlayerCell.innerText = newPlayer;
@@ -351,7 +363,7 @@ function handleClickAddPlayerButton(event) {
     // Add the empty score cells
     const holeCount = MAX_HOLES;
     for (let i = 0; i < holeCount; ++i) {
-        const scoreTableDatum = newElement('td');
+        const scoreTableDatum = newTableDatum();
         scoreTableDatum.addEventListener('click', handleClickAddStrokes);
         newPlayerRow.appendChild(scoreTableDatum);
     }
