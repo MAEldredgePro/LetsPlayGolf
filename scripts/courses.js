@@ -97,6 +97,12 @@ function appendPlayButton(courseInfoTable) {
     courseInfoTable.appendChild(playButtonRow);
 }
 
+function appendTableDatum(tableRow, innerText) {
+    const tableDatum = newTableDatum();
+    tableDatum.innerText = innerText;
+    tableRow.appendChild(tableDatum);
+}
+
 function createCourseInfoTable() {
     return newElement('table', CLS_COURSE_INFO);
 }
@@ -131,7 +137,7 @@ function createCourseInfoTableHeaderRow(numHoles) {
 function fetchCourseInfo(courseID) {
     fetch(COURSE_DATA_URL(courseID))
         .then(response => response.json())
-        .then(courseData => renderCourseData(courseData.data.holes));
+        .then(courseData => updateCourseDataTable(courseData.data.holes));
 }
 
 function fetchCourseList() {
@@ -209,7 +215,94 @@ function removeControlButtons(courseInfoTable) {
     }
 }
 
-function renderCourseData(holesData) {
+function renderCourseDataRow() {
+    const tableRow = newElement('tr');
+
+    const teeBoxNumData = TeeBoxInfo.datumLabels.length;
+    const teeBoxDatumSelector = j % teeBoxNumData;
+    let rowTeeType;
+
+    if (0 == teeBoxDatumSelector) {
+        const teeType = teeTypes[Math.floor(j / teeBoxNumData)];
+        // console.log(`teeType: ${teeType}`);
+        rowTeeType = teeType;
+
+        const teeTypeTableDatum = newTableDatum();
+        teeTypeTableDatum.setAttribute('rowspan', teeBoxNumData);
+        const teeTypeSelectButton = newElement('button');
+        teeTypeSelectButton.innerText = teeType;
+        // teeTypeSelectButton.classAttr = 'teeTypeSelectButton';
+        teeTypeSelectButton.addEventListener('click', handleClickTeeTypeButton)
+        teeTypeTableDatum.appendChild(teeTypeSelectButton);
+        tableRow.appendChild(teeTypeTableDatum);
+    }
+
+    const rowLabelTableDatum = newTableDatum();
+    rowLabelTableDatum.innerText = TeeBoxInfo.datumLabels[teeBoxDatumSelector];
+    tableRow.appendChild(rowLabelTableDatum);
+
+    let outHalfGameTotal;
+    let halfGameTotalTableDatum;
+    let rowTotal = 0;
+    const numColumns = infoGrid.length;
+    for (let i = 0; i < numColumns; ++i) {
+        // Halfway through iterating the columns, add the first half game
+        // total cell (the 'Out' value cell)
+        if (halfGameTotalTableDatum && (i >= numColumns / 2)) {
+            outHalfGameTotal = rowTotal;
+            appendTableDatum(tableRow, outHalfGameTotal);
+        }
+
+        // Append the cell with the current info grid data
+        appendTableDatum(tableRow, infoGrid[i][j]);
+
+        // Keep a running total of the row values
+        rowTotal += infoGrid[i][j];
+
+    }
+
+    // After iterating the columns, add the second half game total cell
+    // (the 'In' value cell)
+    const inHalfGameTotal = rowTotal - outHalfGameTotal;
+    appendTableDatum(tableRow, inHalfGameTotal);
+
+    // Add a total cell at the end of the row
+    appendTableDatum(tableRow, rowTotal);
+
+    // Set the row class attribute as the tee type so we can selectively
+    // show/hide the rows associated with the tee type that the user
+    // selects.
+    tableRow.setAttribute('class', rowTeeType);
+
+    return tableRow;
+}
+
+function renderCourseSelectionPage(courses) {
+    const courseSelect = newElement('select');
+
+    // Add a 'prompt' option which can't be selected,
+    // but will prompt the user to make a course selection.
+    const promptOption = newElement('option');
+    promptOption.selected = true;
+    promptOption.disabled = true;
+    promptOption.innerText = 'Select a course:';
+    courseSelect.appendChild(promptOption);
+
+    // Add the available course options.
+    courses.forEach(course => {
+        const courseOption = newElement('option');
+        courseOption.setAttribute('id', course.id);
+        courseOption.innerText = course.name;
+        courseSelect.appendChild(courseOption);
+    })
+
+    // Finished creating the course select dropdown.
+    // Add its event listener and add it to the page.
+    courseSelect.addEventListener('change', handleChangeCourseSelect);
+    document.body.appendChild(courseSelect);
+}
+
+function updateCourseDataTable(holesData) {
     // console.log(`holesData.length: ${holesData.length}`);
 
     // Iterate the holes 1-18. This is a column-wise iteration which does
@@ -236,60 +329,7 @@ function renderCourseData(holesData) {
     // Turn the infoGrid on its side and iterate the data.
     const numRows = infoGrid[0].length;
     for (let j = 0; j < numRows; ++j) {
-        const tableRow = newElement('tr');
-
-        const teeBoxNumData = TeeBoxInfo.datumLabels.length;
-        const teeBoxDatumSelector = j % teeBoxNumData;
-        let rowTeeType;
-
-        if (0 == teeBoxDatumSelector) {
-            const teeType = teeTypes[Math.floor(j / teeBoxNumData)];
-            // console.log(`teeType: ${teeType}`);
-            rowTeeType = teeType;
-
-            const teeTypeTableDatum = newTableDatum();
-            teeTypeTableDatum.setAttribute('rowspan', teeBoxNumData);
-            const teeTypeSelectButton = newElement('button');
-            teeTypeSelectButton.innerText = teeType;
-            // teeTypeSelectButton.classAttr = 'teeTypeSelectButton';
-            teeTypeSelectButton.addEventListener('click', handleClickTeeTypeButton)
-            teeTypeTableDatum.appendChild(teeTypeSelectButton);
-            tableRow.appendChild(teeTypeTableDatum);
-        }
-
-        const rowLabelTableDatum = newTableDatum();
-        rowLabelTableDatum.innerText = TeeBoxInfo.datumLabels[teeBoxDatumSelector];
-        tableRow.appendChild(rowLabelTableDatum);
-
-        let halfGameTotal;
-        let halfGameTotalTableDatum;
-        let rowTotal = 0;
-        const numColumns = infoGrid.length;
-        for (let i = 0; i < numColumns; ++i) {
-            // Halfway through iterating the columns, add the 'Out' column
-            if (halfGameTotalTableDatum && (i >= numColumns / 2)) {
-                halfGameTotal = rowTotal;
-                halfGameTotalTableDatum = newTableDatum();
-            }
-
-            // Create the table cell and fill it
-            const tableDatum = newTableDatum();
-            tableDatum.innerText = infoGrid[i][j];
-            tableRow.appendChild(tableDatum);
-
-            // Keep a running total of the row values
-            rowTotal += infoGrid[i][j];
-        }
-
-        // Add a total cell at the end of the row
-        const tableDatum = newTableDatum();
-        tableDatum.innerText = rowTotal;
-        tableRow.appendChild(tableDatum);
-
-        // Set the row class attribute as the tee type so we can selectively
-        // show/hide the rows associated with the tee type that the user
-        // selects.
-        tableRow.setAttribute('class', rowTeeType);
+        const courseInfoTableRow = renderCourseDataRow();
 
         // Add the row to the table.
         courseInfoTable.appendChild(tableRow);
@@ -297,31 +337,6 @@ function renderCourseData(holesData) {
 
     // Drop in the new course info table.
     installCourseInfoTable(courseInfoTable);
-}
-
-function renderCourseSelectionPage(courses) {
-    const courseSelect = newElement('select');
-
-    // Add a 'prompt' option which can't be selected,
-    // but will prompt the user to make a course selection.
-    const promptOption = newElement('option');
-    promptOption.selected = true;
-    promptOption.disabled = true;
-    promptOption.innerText = 'Select a course:';
-    courseSelect.appendChild(promptOption);
-
-    // Add the available course options.
-    courses.forEach(course => {
-        const courseOption = newElement('option');
-        courseOption.setAttribute('id', course.id);
-        courseOption.innerText = course.name;
-        courseSelect.appendChild(courseOption);
-    })
-
-    // Finished creating the course select dropdown.
-    // Add its event listener and add it to the page.
-    courseSelect.addEventListener('change', handleChangeCourseSelect);
-    document.body.appendChild(courseSelect);
 }
 
 function handleChangeCourseSelect(event) {
