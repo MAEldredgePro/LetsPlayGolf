@@ -7,6 +7,7 @@ A mobile-friendly golf score keeping app
 cumulative scores.
    - [x] This row should allow users to enter their name and a per-hole score.
    - [ ] When a user enters a score for a hole, the 'out', 'in', and course
+total columns should update automatically.
 
 ---
 ## Requirements
