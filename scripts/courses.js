@@ -16,9 +16,56 @@ function COURSE_DATA_URL(courseID) {
         + '.txt';
 }
 
-//------------------------------//
-// Global Data type definitions //
-//------------------------------//
+//-------------------//
+// Global Data types //
+//-------------------//
+class ElementFactory {
+    static newButton(innerText = null, classAttrValue = null) {
+        return newElement('button', innerText, classAttrValue);
+    }
+
+    static newSelectOption(innerText) {
+        return newElement('option', innerText);
+    }
+
+    static newSelectDropdown(classAttrValue = null) {
+        return newElement('select', NO_INNER_TEXT, classAttrValue);
+    }
+
+    static newTable(classAttrValue = null) {
+        return newElement('table', NO_INNER_TEXT, classAttrValue);
+    }
+
+    static newTableDatumCell(innerText = null, classAttrValue = null) {
+        return newElement('td', innerText, classAttrValue);
+    }
+
+    static newTableHeaderCell(innerText = null, classAttrValue = null) {
+        return newElement('th', innerText, classAttrValue);
+    }
+
+    static newTableRow(classAttrValue = null) {
+        return newElement('tr', NO_INNER_TEXT, classAttrValue);
+    }
+
+    static #_NO_INNER_TEXT = null;
+    static get NO_INNER_TEXT() { return this.#_NO_INNER_TEXT; }
+
+    static #newElement(tag, innerText, classAttrValue = null) {
+        const element = document.createElement(tag);
+
+        if (classAttrValue) {
+            element.setAttribute('class', classAttrValue);
+        }
+
+        if (innerText) {
+            element.innerText = innerText;
+        }
+
+        return element;
+    }
+}
+
 class TeeBoxInfo {
     static datumLabels = [
         'Yards',
@@ -65,12 +112,11 @@ window.onload = fetchCourseList;
 
 function appendAddPlayerButton(courseInfoTable) {
     // Create a row and cell for the user to click on to add a player.
-    const addPlayerButton = newElement('button');
-    addPlayerButton.innerText = 'Add a player';
+    const addPlayerButton = ElementFactory.newButton('Add a player');
     addPlayerButton.addEventListener('click', handleClickAddPlayerButton);
-    const addPlayerCell = newTableDatum();
+    const addPlayerCell = ElementFactory.newTableDatumCell();
     addPlayerCell.appendChild(addPlayerButton);
-    const addPlayerRow = newElement('tr', CLS_CTRL_ROW);
+    const addPlayerRow = ElementFactory.newTableRow(CLS_CTRL_ROW);
     addPlayerRow.appendChild(addPlayerCell);
     courseInfoTable.appendChild(addPlayerRow);
 }
@@ -87,48 +133,42 @@ function appendControlButtons(courseInfoTable) {
 
 function appendPlayButton(courseInfoTable) {
     // Create a row and cell for the user to click on to add a player.
-    const playButton = newElement('button');
-    playButton.innerText = 'Play Golf!';
+    const playButton = ElementFactory.newButton('Play Golf!');
     playButton.addEventListener('click', handleClickPlayButton);
-    const playButtonCell = newTableDatum();
+    const playButtonCell = ElementFactory.newTableDatumCell();
     playButtonCell.appendChild(playButton);
-    const playButtonRow = newElement('tr', CLS_CTRL_ROW);
+    const playButtonRow = ElementFactory.newTableRow(CLS_CTRL_ROW);
     playButtonRow.appendChild(playButtonCell);
     courseInfoTable.appendChild(playButtonRow);
 }
 
 function appendTableDatum(tableRow, innerText) {
-    const tableDatum = newTableDatum();
-    tableDatum.innerText = innerText;
+    const tableDatum = ElementFactory.newTableDatumCell(innerText);
     tableRow.appendChild(tableDatum);
 }
 
 function createCourseInfoTable() {
-    return newElement('table', CLS_COURSE_INFO);
+    return newTable(NO_INNER_TEXT, CLS_COURSE_INFO);
 }
 
 function createCourseInfoTableHeaderRow(numHoles) {
-    const tableHeaderRow = newElement('tr', CLS_HEADER);
+    const tableHeaderRow = ElementFactory.newTableRow(CLS_HEADER);
 
     // Add the label 'Tee' to the table header row.
-    let tableRowLabel = newElement('th');
+    let tableRowLabel = newTableHeaderCell('Tee');
     tableHeaderRow.appendChild(tableRowLabel);
-    tableRowLabel.innerText = 'Tee';
 
     // Add the label 'Hole' to the table header row.
-    tableRowLabel = newElement('th');
-    tableRowLabel.innerText = 'Hole';
+    tableRowLabel = newTableHeaderCell('Hole');
     tableHeaderRow.appendChild(tableRowLabel);
 
     for (let holeNum = 1; holeNum <= numHoles; ++holeNum) {
-        const tableHeaderData = newElement('th');
-        tableHeaderData.innerText = holeNum;
+        const tableHeaderData = newTableHeaderCell(holeNum);
         tableHeaderRow.appendChild(tableHeaderData);
     }
 
     // Add the label 'Totals' to the end of the table header row.
-    tableRowLabel = newElement('th');
-    tableRowLabel.innerText = 'Totals';
+    tableRowLabel = newTableHeaderCell('Totals');
     tableHeaderRow.appendChild(tableRowLabel);
 
     return tableHeaderRow;
@@ -195,104 +235,95 @@ function isNumeric(str) {
         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
 }
 
-function newElement(tag, classAttrValue = null) {
-    const element = document.createElement(tag);
-
-    if (classAttrValue) {
-        element.setAttribute('class', classAttrValue);
-    }
-
-    return element;
-}
-
-function newTableDatum(classAttrValue = null) {
-    return newElement('td', classAttrValue);
-}
-
 function removeControlButtons(courseInfoTable) {
     while (courseInfoTable.lastChild.className === CLS_CTRL_ROW) {
         courseInfoTable.lastChild.remove();
     }
 }
 
-function renderCourseDataRow() {
-    const tableRow = newElement('tr');
+function renderCourseInfoTableRows(infoGrid) {
+    // initialize the row array we will be returning
+    const courseInfoTableRows = [];
 
-    const teeBoxNumData = TeeBoxInfo.datumLabels.length;
-    const teeBoxDatumSelector = j % teeBoxNumData;
-    let rowTeeType;
+    // Turn the infoGrid on its side and iterate the data.
+    const numRows = infoGrid[0].length;
+    for (let j = 0; j < numRows; ++j) {
+        const tableRow = ElementFactory.newTableRow();
 
-    if (0 == teeBoxDatumSelector) {
-        const teeType = teeTypes[Math.floor(j / teeBoxNumData)];
-        // console.log(`teeType: ${teeType}`);
-        rowTeeType = teeType;
+        const teeBoxNumData = TeeBoxInfo.datumLabels.length;
+        const teeBoxDatumSelector = j % teeBoxNumData;
+        let rowTeeType;
 
-        const teeTypeTableDatum = newTableDatum();
-        teeTypeTableDatum.setAttribute('rowspan', teeBoxNumData);
-        const teeTypeSelectButton = newElement('button');
-        teeTypeSelectButton.innerText = teeType;
-        // teeTypeSelectButton.classAttr = 'teeTypeSelectButton';
-        teeTypeSelectButton.addEventListener('click', handleClickTeeTypeButton)
-        teeTypeTableDatum.appendChild(teeTypeSelectButton);
-        tableRow.appendChild(teeTypeTableDatum);
-    }
+        if (0 == teeBoxDatumSelector) {
+            const teeType = teeTypes[Math.floor(j / teeBoxNumData)];
+            rowTeeType = teeType;
 
-    const rowLabelTableDatum = newTableDatum();
-    rowLabelTableDatum.innerText = TeeBoxInfo.datumLabels[teeBoxDatumSelector];
-    tableRow.appendChild(rowLabelTableDatum);
-
-    let outHalfGameTotal;
-    let halfGameTotalTableDatum;
-    let rowTotal = 0;
-    const numColumns = infoGrid.length;
-    for (let i = 0; i < numColumns; ++i) {
-        // Halfway through iterating the columns, add the first half game
-        // total cell (the 'Out' value cell)
-        if (halfGameTotalTableDatum && (i >= numColumns / 2)) {
-            outHalfGameTotal = rowTotal;
-            appendTableDatum(tableRow, outHalfGameTotal);
+            const teeTypeTableDatum = newTableDatumCell();
+            teeTypeTableDatum.setAttribute('rowspan', teeBoxNumData);
+            const teeTypeSelectButton = ElementFactory.newButton(teeType);
+            teeTypeSelectButton.addEventListener('click', handleClickTeeTypeButton)
+            teeTypeTableDatum.appendChild(teeTypeSelectButton);
+            tableRow.appendChild(teeTypeTableDatum);
         }
 
-        // Append the cell with the current info grid data
-        appendTableDatum(tableRow, infoGrid[i][j]);
+        const rowLabelTableDatum = newTableDatumCell(TeeBoxInfo.datumLabels[teeBoxDatumSelector]);
+        tableRow.appendChild(rowLabelTableDatum);
 
-        // Keep a running total of the row values
-        rowTotal += infoGrid[i][j];
+        let outHalfGameTotal;
+        let halfGameTotalTableDatum;
+        let rowTotal = 0;
+        const numColumns = infoGrid.length;
+        for (let i = 0; i < numColumns; ++i) {
+            // Halfway through iterating the columns, add the first half game
+            // total cell (the 'Out' value cell)
+            if (halfGameTotalTableDatum && (i >= numColumns / 2)) {
+                outHalfGameTotal = rowTotal;
+                appendTableDatum(tableRow, outHalfGameTotal);
+            }
 
+            // Append the cell with the current info grid data
+            appendTableDatum(tableRow, infoGrid[i][j]);
+
+            // Keep a running total of the row values
+            rowTotal += infoGrid[i][j];
+
+        }
+
+        // After iterating the columns, add the second half game total cell
+        // (the 'In' value cell)
+        const inHalfGameTotal = rowTotal - outHalfGameTotal;
+        appendTableDatum(tableRow, inHalfGameTotal);
+
+        // Add a total cell at the end of the row
+        appendTableDatum(tableRow, rowTotal);
+
+        // Set the row class attribute as the tee type so we can selectively
+        // show/hide the rows associated with the tee type that the user
+        // selects.
+        tableRow.setAttribute('class', rowTeeType);
+
+
+        // Add the row to the table.
+        courseInfoTable.appendChild(tableRow);
     }
 
-    // After iterating the columns, add the second half game total cell
-    // (the 'In' value cell)
-    const inHalfGameTotal = rowTotal - outHalfGameTotal;
-    appendTableDatum(tableRow, inHalfGameTotal);
-
-    // Add a total cell at the end of the row
-    appendTableDatum(tableRow, rowTotal);
-
-    // Set the row class attribute as the tee type so we can selectively
-    // show/hide the rows associated with the tee type that the user
-    // selects.
-    tableRow.setAttribute('class', rowTeeType);
-
-    return tableRow;
+    return courseInfoTableRows;
 }
 
 function renderCourseSelectionPage(courses) {
-    const courseSelect = newElement('select');
+    const courseSelect = ElementFactory.newSelectDropdown();
 
     // Add a 'prompt' option which can't be selected,
     // but will prompt the user to make a course selection.
-    const promptOption = newElement('option');
+    const promptOption = ElementFactory.newSelectOption('Select a course:');
     promptOption.selected = true;
     promptOption.disabled = true;
-    promptOption.innerText = 'Select a course:';
     courseSelect.appendChild(promptOption);
 
     // Add the available course options.
     courses.forEach(course => {
-        const courseOption = newElement('option');
+        const courseOption = ElementFactory.newSelectOption(course.name);
         courseOption.setAttribute('id', course.id);
-        courseOption.innerText = course.name;
         courseSelect.appendChild(courseOption);
     })
 
@@ -303,21 +334,14 @@ function renderCourseSelectionPage(courses) {
 }
 
 function updateCourseDataTable(holesData) {
-    // console.log(`holesData.length: ${holesData.length}`);
+    // // Iterate the holes 1-18. This is a column-wise iteration which does
+    // // not lend itself well to creating HTML as-you-go (which is row-wise)
+    // // so we have to build something in-memory that we can traverse row-wise.
 
-    // Iterate the holes 1-18. This is a column-wise iteration which does
-    // not lend itself well to creating HTML as-you-go (which is row-wise)
-    // so we have to build something in-memory that we can traverse row-wise.
-    const infoGrid = generateInfoGrid(holesData);
-
-    const teeTypes = [];
-    holesData[0].teeBoxes.forEach(teeBox => {
-        teeTypes.push(teeBox.teeType);
-    })
-
-    ////////////////////////////////////
-    // Assemble the course info table //
-    ////////////////////////////////////
+    // const teeTypes = [];
+    // holesData[0].teeBoxes.forEach(teeBox => {
+    //     teeTypes.push(teeBox.teeType);
+    // })
 
     // Create the course info table.
     const courseInfoTable = createCourseInfoTable();
@@ -326,14 +350,12 @@ function updateCourseDataTable(holesData) {
     tableHeaderRow = createCourseInfoTableHeaderRow(holesData.length);
     courseInfoTable.appendChild(tableHeaderRow);
 
-    // Turn the infoGrid on its side and iterate the data.
-    const numRows = infoGrid[0].length;
-    for (let j = 0; j < numRows; ++j) {
-        const courseInfoTableRow = renderCourseDataRow();
-
-        // Add the row to the table.
-        courseInfoTable.appendChild(tableRow);
-    }
+    // render and add the course info table data rows
+    const infoGrid = generateInfoGrid(holesData);
+    const courseInfoTableRows = renderCourseInfoTableRows(infoGrid);
+    courseInfoTableRows.forEach(row => {
+        courseInfoTable.appendChild(row);
+    })
 
     // Drop in the new course info table.
     installCourseInfoTable(courseInfoTable);
@@ -368,17 +390,16 @@ function handleClickAddPlayerButton(event) {
     removeControlButtons(courseInfoTable);
 
     // Add the new player.
-    const newPlayerCell = newTableDatum();
+    const newPlayerCell = newTableDatumCell(newPlayer);
     newPlayerCell.setAttribute('colspan', 2);
     newPlayerCell.style.textAlign = 'center';
-    newPlayerCell.innerText = newPlayer;
-    const newPlayerRow = newElement('tr');
+    const newPlayerRow = ElementFactory.newTableRow();
     newPlayerRow.appendChild(newPlayerCell);
 
     // Add the empty score cells
     const holeCount = MAX_HOLES;
     for (let i = 0; i < holeCount; ++i) {
-        const scoreTableDatum = newTableDatum();
+        const scoreTableDatum = newTableDatumCell();
         scoreTableDatum.addEventListener('click', handleClickAddStrokes);
         newPlayerRow.appendChild(scoreTableDatum);
     }
@@ -425,7 +446,7 @@ function handleClickPlayButton() {
 
 function handleClickTeeTypeButton(event) {
     const selectedTeeType = event.target.innerText;
-    console.log(`'${selectedTeeType}' button clicked`);
+    // console.log(`'${selectedTeeType}' button clicked`);
 
     // Get the course info table.
     const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
