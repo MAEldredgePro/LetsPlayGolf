@@ -228,20 +228,20 @@ function createCourseInfoTableHeaderRow(numHoles) {
 
     // Add the hole numbers 1-9 as header cells for each hole's tee box info
     for (let holeNum = 1; holeNum <= (numHoles / 2); ++holeNum) {
-        const tableHeaderData = ElementFactory.newTableHeaderCell(holeNum);
-        tableHeaderRow.appendChild(tableHeaderData);
+        const tableHeaderDatum = ElementFactory.newTableHeaderCell(holeNum);
+        tableHeaderRow.appendChild(tableHeaderDatum);
     }
 
     // Add the 'Out' subtotal column header
     {
-        const tableHeaderData = ElementFactory.newTableHeaderCell(holeNum);
-        tableHeaderRow.appendChild(tableHeaderData);
+        const tableHeaderDatum = ElementFactory.newTableHeaderCell(holeNum);
+        tableHeaderRow.appendChild(tableHeaderDatum);
     }
 
     // Add the hole numbers 10-18 as header cells for each hole's tee box info
     for (let holeNum = (numHoles / 2) + 1; holeNum <= numHoles; ++holeNum) {
-        const tableHeaderData = ElementFactory.newTableHeaderCell(holeNum);
-        tableHeaderRow.appendChild(tableHeaderData);
+        const tableHeaderDatum = ElementFactory.newTableHeaderCell(holeNum);
+        tableHeaderRow.appendChild(tableHeaderDatum);
     }
 
     // Add the 'Total' column label to the end of the table header row.
