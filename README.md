@@ -3,11 +3,7 @@ A mobile-friendly golf score keeping app
 
 ---
 ## Actively Developing Requirement(s)
- - [ ] (4pt) Create a row for each player to to keep track of their per-hole and
-cumulative scores.
-   - [x] This row should allow users to enter their name and a per-hole score.
-   - [ ] When a user enters a score for a hole, the 'out', 'in', and course
-total columns should update automatically.
+ - [ ] (3pt) Add some CSS to style the card to look like an actual golf
 
 ---
 ## Requirements
@@ -26,10 +22,10 @@ total columns should update automatically.
    - [x] hole yardage
    - [x] hole par
    - [x] hole handicap
- - [ ] (4pt) Create a row for each player to to keep track of their per-hole and
+ - [x] (4pt) Create a row for each player to to keep track of their per-hole and
 cumulative scores.
    - [x] This row should allow users to enter their name and a per-hole score.
-   - [ ] When a user enters a score for a hole, the 'out', 'in', and course
+   - [x] When a user enters a score for a hole, the 'out', 'in', and course
 total columns should update automatically.
  - [ ] (3pt) Add some CSS to style the card to look like an actual golf card.
  - [x] (5pt) Allow users to select which tee they will be using
