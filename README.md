@@ -3,7 +3,7 @@ A mobile-friendly golf score keeping app
 
 ---
 ## Actively Developing Requirement(s)
- - [ ] (3pt) Add some CSS to style the card to look like an actual golf
+ - [ ] (3pt) Add some CSS to style the card to look like an actual golf card.
 
 ---
 ## Requirements
