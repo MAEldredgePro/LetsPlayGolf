@@ -21,31 +21,31 @@ function COURSE_DATA_URL(courseID) {
 //-------------------//
 class ElementFactory {
     static newButton(innerText = null, classAttrValue = null) {
-        return newElement('button', innerText, classAttrValue);
+        return this.#newElement('button', innerText, classAttrValue);
     }
 
     static newSelectOption(innerText) {
-        return newElement('option', innerText);
+        return this.#newElement('option', innerText);
     }
 
     static newSelectDropdown(classAttrValue = null) {
-        return newElement('select', NO_INNER_TEXT, classAttrValue);
+        return this.#newElement('select', this.NO_INNER_TEXT, classAttrValue);
     }
 
     static newTable(classAttrValue = null) {
-        return newElement('table', NO_INNER_TEXT, classAttrValue);
+        return this.#newElement('table', this.NO_INNER_TEXT, classAttrValue);
     }
 
     static newTableDatumCell(innerText = null, classAttrValue = null) {
-        return newElement('td', innerText, classAttrValue);
+        return this.#newElement('td', innerText, classAttrValue);
     }
 
     static newTableHeaderCell(innerText = null, classAttrValue = null) {
-        return newElement('th', innerText, classAttrValue);
+        return this.#newElement('th', innerText, classAttrValue);
     }
 
     static newTableRow(classAttrValue = null) {
-        return newElement('tr', NO_INNER_TEXT, classAttrValue);
+        return this.#newElement('tr', this.NO_INNER_TEXT, classAttrValue);
     }
 
     static #_NO_INNER_TEXT = null;
@@ -148,27 +148,27 @@ function appendTableDatum(tableRow, innerText) {
 }
 
 function createCourseInfoTable() {
-    return newTable(NO_INNER_TEXT, CLS_COURSE_INFO);
+    return ElementFactory.newTable(CLS_COURSE_INFO);
 }
 
 function createCourseInfoTableHeaderRow(numHoles) {
     const tableHeaderRow = ElementFactory.newTableRow(CLS_HEADER);
 
     // Add the label 'Tee' to the table header row.
-    let tableRowLabel = newTableHeaderCell('Tee');
+    let tableRowLabel = ElementFactory.newTableHeaderCell('Tee');
     tableHeaderRow.appendChild(tableRowLabel);
 
     // Add the label 'Hole' to the table header row.
-    tableRowLabel = newTableHeaderCell('Hole');
+    tableRowLabel = ElementFactory.newTableHeaderCell('Hole');
     tableHeaderRow.appendChild(tableRowLabel);
 
     for (let holeNum = 1; holeNum <= numHoles; ++holeNum) {
-        const tableHeaderData = newTableHeaderCell(holeNum);
+        const tableHeaderData = ElementFactory.newTableHeaderCell(holeNum);
         tableHeaderRow.appendChild(tableHeaderData);
     }
 
     // Add the label 'Totals' to the end of the table header row.
-    tableRowLabel = newTableHeaderCell('Totals');
+    tableRowLabel = ElementFactory.newTableHeaderCell('Totals');
     tableHeaderRow.appendChild(tableRowLabel);
 
     return tableHeaderRow;
@@ -241,7 +241,11 @@ function removeControlButtons(courseInfoTable) {
     }
 }
 
-function renderCourseInfoTableRows(infoGrid) {
+function renderCourseInfoTableRows(teeTypes, infoGrid) {
+    // Iterate the holes 1-18. This is a column-wise iteration which does
+    // not lend itself well to creating HTML as-you-go (which is row-wise)
+    // so we have to build something in-memory that we can traverse row-wise.
+
     // initialize the row array we will be returning
     const courseInfoTableRows = [];
 
@@ -255,19 +259,29 @@ function renderCourseInfoTableRows(infoGrid) {
         let rowTeeType;
 
         if (0 == teeBoxDatumSelector) {
-            const teeType = teeTypes[Math.floor(j / teeBoxNumData)];
-            rowTeeType = teeType;
+            // Select the tee type based on some magic math whose nature I
+            // forgot atm (you're smart, I just know you can figure it out).
 
-            const teeTypeTableDatum = newTableDatumCell();
-            teeTypeTableDatum.setAttribute('rowspan', teeBoxNumData);
-            const teeTypeSelectButton = ElementFactory.newButton(teeType);
+            const teeTypeSelector = Math.floor(j / teeBoxNumData);
+            rowTeeType = teeTypes[teeTypeSelector];
+
+            // Create the tee type select button for the user
+            const teeTypeSelectButton = ElementFactory.newButton(rowTeeType);
             teeTypeSelectButton.addEventListener('click', handleClickTeeTypeButton)
+
+            // Create the table data cell to hold the select button
+            const teeTypeTableDatum = ElementFactory.newTableDatumCell();
+            teeTypeTableDatum.setAttribute('rowspan', teeBoxNumData);
+
+            // add the button to the cell
             teeTypeTableDatum.appendChild(teeTypeSelectButton);
+
+            // add the cell to the row
             tableRow.appendChild(teeTypeTableDatum);
         }
 
-        const rowLabelTableDatum = newTableDatumCell(TeeBoxInfo.datumLabels[teeBoxDatumSelector]);
-        tableRow.appendChild(rowLabelTableDatum);
+        const rowLabel = TeeBoxInfo.datumLabels[teeBoxDatumSelector];
+        tableRow.appendChild(ElementFactory.newTableDatumCell(rowLabel));
 
         let outHalfGameTotal;
         let halfGameTotalTableDatum;
@@ -302,11 +316,11 @@ function renderCourseInfoTableRows(infoGrid) {
         // selects.
         tableRow.setAttribute('class', rowTeeType);
 
-
-        // Add the row to the table.
-        courseInfoTable.appendChild(tableRow);
+        // Add the row to the array of rows we will be returning
+        courseInfoTableRows.push(tableRow);
     }
 
+    // return the array of rows
     return courseInfoTableRows;
 }
 
@@ -334,14 +348,13 @@ function renderCourseSelectionPage(courses) {
 }
 
 function updateCourseDataTable(holesData) {
-    // // Iterate the holes 1-18. This is a column-wise iteration which does
-    // // not lend itself well to creating HTML as-you-go (which is row-wise)
-    // // so we have to build something in-memory that we can traverse row-wise.
-
-    // const teeTypes = [];
-    // holesData[0].teeBoxes.forEach(teeBox => {
-    //     teeTypes.push(teeBox.teeType);
-    // })
+    // Helper function to gather the tee types from the holesData
+    function getTeeTypes(holesData) {
+        const teeBoxes = holesData[0].teeBoxes
+        const teeTypes = [];
+        teeBoxes.forEach(teeBox => { teeTypes.push(teeBox.teeType); })
+        return teeTypes;
+    }
 
     // Create the course info table.
     const courseInfoTable = createCourseInfoTable();
@@ -351,8 +364,9 @@ function updateCourseDataTable(holesData) {
     courseInfoTable.appendChild(tableHeaderRow);
 
     // render and add the course info table data rows
+    const teeTypes = getTeeTypes(holesData);
     const infoGrid = generateInfoGrid(holesData);
-    const courseInfoTableRows = renderCourseInfoTableRows(infoGrid);
+    const courseInfoTableRows = renderCourseInfoTableRows(teeTypes, infoGrid);
     courseInfoTableRows.forEach(row => {
         courseInfoTable.appendChild(row);
     })
@@ -390,7 +404,7 @@ function handleClickAddPlayerButton(event) {
     removeControlButtons(courseInfoTable);
 
     // Add the new player.
-    const newPlayerCell = newTableDatumCell(newPlayer);
+    const newPlayerCell = ElementFactory.newTableDatumCell(newPlayer);
     newPlayerCell.setAttribute('colspan', 2);
     newPlayerCell.style.textAlign = 'center';
     const newPlayerRow = ElementFactory.newTableRow();
@@ -399,7 +413,7 @@ function handleClickAddPlayerButton(event) {
     // Add the empty score cells
     const holeCount = MAX_HOLES;
     for (let i = 0; i < holeCount; ++i) {
-        const scoreTableDatum = newTableDatumCell();
+        const scoreTableDatum = ElementFactory.newTableDatumCell();
         scoreTableDatum.addEventListener('click', handleClickAddStrokes);
         newPlayerRow.appendChild(scoreTableDatum);
     }
