@@ -257,14 +257,14 @@ function createCourseInfoTableHeaderRow(numHoles) {
     return tableHeaderRow;
 }
 
-function createTeeTypeTableDatum(rowTeeType) {
+function createTeeTypeTableDatum(rowTeeType, numDataRowsPerTeeType) {
     // Create the tee type select button for the user
     const teeTypeSelectButton = ElementFactory.newButton(rowTeeType);
     teeTypeSelectButton.addEventListener(EV_CLICK, handleClickTeeTypeButton)
 
     // Create the table data cell to hold the select button
     const teeTypeTableDatum = ElementFactory.newTableDatumCell();
-    teeTypeTableDatum.setAttribute(ATTR_ROWSPAN, teeBoxNumData);
+    teeTypeTableDatum.setAttribute(ATTR_ROWSPAN, numDataRowsPerTeeType);
 
     // add the button to the cell
     teeTypeTableDatum.appendChild(teeTypeSelectButton);
@@ -373,7 +373,8 @@ function renderCourseInfoTableRows(teeTypes, infoGrid) {
             // selection button so the user can choose which tee type
             // (ex: pro, champion, men's, women's) they would like to use
             // for the game they are about to play.
-            const teeTypeTableDatum = createTeeTypeTableDatum(rowTeeType);
+            const teeTypeTableDatum =
+                createTeeTypeTableDatum(rowTeeType, numDataRowsPerTeeType);
 
             // add the cell to the row
             tableRow.appendChild(teeTypeTableDatum);
