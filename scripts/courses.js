@@ -234,7 +234,7 @@ function createCourseInfoTableHeaderRow(numHoles) {
 
     // Add the 'Out' subtotal column header
     {
-        const tableHeaderDatum = ElementFactory.newTableHeaderCell(holeNum);
+        const tableHeaderDatum = ElementFactory.newTableHeaderCell(LBL_OUT);
         tableHeaderRow.appendChild(tableHeaderDatum);
     }
 
@@ -244,11 +244,32 @@ function createCourseInfoTableHeaderRow(numHoles) {
         tableHeaderRow.appendChild(tableHeaderDatum);
     }
 
+    // Add the 'In' subtotal column header
+    {
+        const tableHeaderDatum = ElementFactory.newTableHeaderCell(LBL_IN);
+        tableHeaderRow.appendChild(tableHeaderDatum);
+    }
+
     // Add the 'Total' column label to the end of the table header row.
     tableRowLabel = ElementFactory.newTableHeaderCell(LBL_TOTAL);
     tableHeaderRow.appendChild(tableRowLabel);
 
     return tableHeaderRow;
+}
+
+function createTeeTypeTableDatum(rowTeeType) {
+    // Create the tee type select button for the user
+    const teeTypeSelectButton = ElementFactory.newButton(rowTeeType);
+    teeTypeSelectButton.addEventListener(EV_CLICK, handleClickTeeTypeButton)
+
+    // Create the table data cell to hold the select button
+    const teeTypeTableDatum = ElementFactory.newTableDatumCell();
+    teeTypeTableDatum.setAttribute(ATTR_ROWSPAN, teeBoxNumData);
+
+    // add the button to the cell
+    teeTypeTableDatum.appendChild(teeTypeSelectButton);
+
+    return teeTypeTableDatum;
 }
 
 function fetchCourseInfo(courseID) {
@@ -331,27 +352,28 @@ function renderCourseInfoTableRows(teeTypes, infoGrid) {
     for (let j = 0; j < numRows; ++j) {
         const tableRow = ElementFactory.newTableRow();
 
-        const teeBoxNumData = TeeBoxInfo.datumLabels.length;
-        const teeBoxDatumSelector = j % teeBoxNumData;
+        const numDataRowsPerTeeType = TeeBoxInfo.datumLabels.length;
+        const teeBoxDatumSelector = j % numDataRowsPerTeeType;
+        const onFirstRowOfTeeTypeData = (teeBoxDatumSelector === 0);
         let rowTeeType;
 
-        if (0 == teeBoxDatumSelector) {
-            // Select the tee type based on some magic math whose nature I
-            // forgot atm (you're smart, I just know you can figure it out).
+        // The tee type button table cell spans multiple rows.
+        // If we are at the first of a set of rows all of which
+        // contain data for the current tee type, render the
+        // tee type button cell (tee type table datum) which spans
+        // all the rows containing data for this tee type.
+        if (onFirstRowOfTeeTypeData) {
+            const teeTypeSelector = j / numDataRowsPerTeeType;
 
-            const teeTypeSelector = Math.floor(j / teeBoxNumData);
+            // Save the current tee type so we can set the class attribute for
+            // all the rows containing the data associated with this tee type
             rowTeeType = teeTypes[teeTypeSelector];
 
-            // Create the tee type select button for the user
-            const teeTypeSelectButton = ElementFactory.newButton(rowTeeType);
-            teeTypeSelectButton.addEventListener(EV_CLICK, handleClickTeeTypeButton)
-
-            // Create the table data cell to hold the select button
-            const teeTypeTableDatum = ElementFactory.newTableDatumCell();
-            teeTypeTableDatum.setAttribute(ATTR_ROWSPAN, teeBoxNumData);
-
-            // add the button to the cell
-            teeTypeTableDatum.appendChild(teeTypeSelectButton);
+            // create the table datum (td) that contains the tee type
+            // selection button so the user can choose which tee type
+            // (ex: pro, champion, men's, women's) they would like to use
+            // for the game they are about to play.
+            const teeTypeTableDatum = createTeeTypeTableDatum(rowTeeType);
 
             // add the cell to the row
             tableRow.appendChild(teeTypeTableDatum);
