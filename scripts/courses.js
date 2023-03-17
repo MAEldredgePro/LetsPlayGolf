@@ -1,6 +1,7 @@
 /////////////
 // Globals //
 /////////////
+const MAX_HOLES = 18;
 const CLS_HEADER = 'header';
 const CLS_CTRL_ROW = 'control-row';
 const CLS_COURSE_INFO = 'course-info';
@@ -298,9 +299,20 @@ function handleClickAddPlayerButton(event) {
 
     // Add the new player.
     const newPlayerCell = newElement('td');
+    newPlayerCell.setAttribute('colspan', 2);
+    newPlayerCell.style.textAlign = 'center';
     newPlayerCell.innerText = newPlayer;
     const newPlayerRow = newElement('tr');
     newPlayerRow.appendChild(newPlayerCell);
+
+    // Add the empty score cells
+    const holeCount = MAX_HOLES;
+    for (let i = 0; i < holeCount; ++i) {
+        const scoreTableDatum = newElement('td');
+        scoreTableDatum.addEventListener('click', handleClickAddStrokes);
+        newPlayerRow.appendChild(scoreTableDatum);
+    }
+
     courseInfoTable.appendChild(newPlayerRow);
 
     // Re-add the control buttons.
@@ -320,13 +332,51 @@ function appendPlayButton(courseInfoTable) {
 }
 
 function handleClickPlayButton() {
+    const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
+    removeControlButtons(courseInfoTable);
     alert("Let's Play Golf!");
+    playing = true;
 }
 
 function removeControlButtons(courseInfoTable) {
     while (courseInfoTable.lastChild.className === CLS_CTRL_ROW) {
         courseInfoTable.lastChild.remove();
     }
+}
+
+let playing = false;
+function handleClickAddStrokes(event) {
+    if (!playing) { return; }
+
+    const strokes = prompt('How many strokes?');
+
+    // Make sure the answer is numeric.
+    if (!isNumeric(strokes)) {
+        alert("I didn't recognize that as a number.");
+        return;
+    }
+
+    // Make sure the answer is positive
+    if (strokes < 1) {
+        alert("Oh come on, man!  Nobody is that good.");
+        return;
+    }
+
+    if (Math.floor(strokes) != strokes) {
+        alert("A fractional number of strokes?  Nope.");
+        return;
+    }
+
+    const scoreTableDatum = event.target;
+    scoreTableDatum.innerHTML = strokes;
+    console.log(event.target);
+}
+
+// from https://stackoverflow.com/questions/175739/how-can-i-check-if-a-string-is-a-valid-number
+function isNumeric(str) {
+    if (typeof str != "string") return false // we only process strings!
+    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+        !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
 }
 
 function newElement(tag, classAttrValue = null) {
