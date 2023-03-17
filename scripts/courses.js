@@ -1,11 +1,32 @@
+//#region Constants
 //------------------//
 // Global Constants //
 //------------------//
-const MAX_HOLES = 18;
-const CLS_HEADER = 'header';
-const CLS_CTRL_ROW = 'control-row';
+
+// const ATTR_*
+//#region Attribute Names
+const ATTR_CLASS = 'class';
+const ATTR_COLSPAN = 'colspan';
+const ATTR_ID = 'id';
+const ATTR_ROWSPAN = 'rowspan';
+//#endregion
+
+// const BTN_LBL_*
+//#region Button Labels
+const BTN_LBL_ADD_PLAYER = 'Add a player';
+const BTN_LBL_PLAY_GOLF = 'Play Golf!';
+//#endregion
+
+// const CLS_*
+//#region Class Names
 const CLS_COURSE_INFO = 'course-info';
+const CLS_CTRL_ROW = 'control-row';
+const CLS_HEADER = 'header';
 const CLS_SEL_COURSE_INFO = `.${CLS_COURSE_INFO}`;
+//#endregion
+
+// const COURSE_*
+//#region Course URLs
 const COURSE_LIST_URL =
     'https://maeldredgepro.github.io/LetsPlayGolf/data/courses.json';
 
@@ -15,37 +36,76 @@ function COURSE_DATA_URL(courseID) {
         + courseID
         + '.txt';
 }
+//#endregion
 
+// const EL_*
+//#region Element Names
+const EL_BUTTON = 'button';
+const EL_OPTION = 'option';
+const EL_SELECT = 'select';
+const EL_TABLE = 'table';
+const EL_TD = 'td';
+const EL_TH = 'th';
+const EL_TR = 'tr';
+//#endregion
+
+// const EV_
+//#region Event Names
+const EV_CHANGE = 'change';
+const EV_CLICK = 'click';
+//#endregion
+
+// const LBL_*
+//#region Labels
+const LBL_HOLE = 'Hole';
+const LBL_IN = 'In';
+const LBL_OUT = 'Out';
+const LBL_TEE = 'Tee';
+const LBL_TOTAL = 'Total'
+const LBL_YARDS = 'Yards';
+const LBL_PAR = 'Par';
+const LBL_HCP = 'HCP';
+//#endregion
+
+//#region Misc Constants
+const OPT_SELECT_COURSE = 'Select a course:';
+const PR_GET_STROKE_COUNT = 'How many strokes?';
+const VAL_MAX_HOLES = 18;
+//#endregion
+
+//#endregion Constants
+
+//#region Global Data Types
 //-------------------//
-// Global Data types //
+// Global Data Types //
 //-------------------//
 class ElementFactory {
     static newButton(innerText = null, classAttrValue = null) {
-        return this.#newElement('button', innerText, classAttrValue);
+        return this.#newElement(EL_BUTTON, innerText, classAttrValue);
     }
 
     static newSelectOption(innerText) {
-        return this.#newElement('option', innerText);
+        return this.#newElement(EL_OPTION, innerText);
     }
 
     static newSelectDropdown(classAttrValue = null) {
-        return this.#newElement('select', this.NO_INNER_TEXT, classAttrValue);
+        return this.#newElement(EL_SELECT, this.NO_INNER_TEXT, classAttrValue);
     }
 
     static newTable(classAttrValue = null) {
-        return this.#newElement('table', this.NO_INNER_TEXT, classAttrValue);
+        return this.#newElement(EL_TABLE, this.NO_INNER_TEXT, classAttrValue);
     }
 
     static newTableDatumCell(innerText = null, classAttrValue = null) {
-        return this.#newElement('td', innerText, classAttrValue);
+        return this.#newElement(EL_TD, innerText, classAttrValue);
     }
 
     static newTableHeaderCell(innerText = null, classAttrValue = null) {
-        return this.#newElement('th', innerText, classAttrValue);
+        return this.#newElement(EL_TH, innerText, classAttrValue);
     }
 
     static newTableRow(classAttrValue = null) {
-        return this.#newElement('tr', this.NO_INNER_TEXT, classAttrValue);
+        return this.#newElement(EL_TR, this.NO_INNER_TEXT, classAttrValue);
     }
 
     static #_NO_INNER_TEXT = null;
@@ -55,7 +115,7 @@ class ElementFactory {
         const element = document.createElement(tag);
 
         if (classAttrValue) {
-            element.setAttribute('class', classAttrValue);
+            element.setAttribute(ATTR_CLASS, classAttrValue);
         }
 
         if (innerText) {
@@ -68,9 +128,9 @@ class ElementFactory {
 
 class TeeBoxInfo {
     static datumLabels = [
-        'Yards',
-        'Par',
-        'HCP',
+        LBL_YARDS,
+        LBL_PAR,
+        LBL_HCP,
     ];
 
     constructor(teeBoxData) {
@@ -90,13 +150,17 @@ class TeeBoxInfo {
         }
     }
 }
+//#endregion Global Data Types
 
+//#region Global Variables
 //------------------//
 // Global Variables //
 //------------------//
 var g_playModeActive = false;
 const g_playerList = [];
+//#endregion
 
+//#region Global Executable Code
 //-----------------------//
 // Global Excutable Code //
 //-----------------------//
@@ -105,15 +169,15 @@ const g_playerList = [];
 // the (main-ish) function to be called once the html has finished loading.
 window.onload = fetchCourseList;
 
+//#endregion
 
-//----------------------------//
-// Globally Visible Functions //
-//----------------------------//
+//| Function Definitions |
+//|======================|
 
 function appendAddPlayerButton(courseInfoTable) {
     // Create a row and cell for the user to click on to add a player.
-    const addPlayerButton = ElementFactory.newButton('Add a player');
-    addPlayerButton.addEventListener('click', handleClickAddPlayerButton);
+    const addPlayerButton = ElementFactory.newButton(BTN_LBL_ADD_PLAYER);
+    addPlayerButton.addEventListener(EV_CLICK, handleClickAddPlayerButton);
     const addPlayerCell = ElementFactory.newTableDatumCell();
     addPlayerCell.appendChild(addPlayerButton);
     const addPlayerRow = ElementFactory.newTableRow(CLS_CTRL_ROW);
@@ -133,8 +197,8 @@ function appendControlButtons(courseInfoTable) {
 
 function appendPlayButton(courseInfoTable) {
     // Create a row and cell for the user to click on to add a player.
-    const playButton = ElementFactory.newButton('Play Golf!');
-    playButton.addEventListener('click', handleClickPlayButton);
+    const playButton = ElementFactory.newButton(BTN_LBL_PLAY_GOLF);
+    playButton.addEventListener(EV_CLICK, handleClickPlayButton);
     const playButtonCell = ElementFactory.newTableDatumCell();
     playButtonCell.appendChild(playButton);
     const playButtonRow = ElementFactory.newTableRow(CLS_CTRL_ROW);
@@ -154,21 +218,34 @@ function createCourseInfoTable() {
 function createCourseInfoTableHeaderRow(numHoles) {
     const tableHeaderRow = ElementFactory.newTableRow(CLS_HEADER);
 
-    // Add the label 'Tee' to the table header row.
-    let tableRowLabel = ElementFactory.newTableHeaderCell('Tee');
+    // Add the 'Tee' column label to the table header row.
+    let tableRowLabel = ElementFactory.newTableHeaderCell(LBL_TEE);
     tableHeaderRow.appendChild(tableRowLabel);
 
-    // Add the label 'Hole' to the table header row.
-    tableRowLabel = ElementFactory.newTableHeaderCell('Hole');
+    // Add the 'Hole' column label to the table header row.
+    tableRowLabel = ElementFactory.newTableHeaderCell(LBL_HOLE);
     tableHeaderRow.appendChild(tableRowLabel);
 
-    for (let holeNum = 1; holeNum <= numHoles; ++holeNum) {
+    // Add the hole numbers 1-9 as header cells for each hole's tee box info
+    for (let holeNum = 1; holeNum <= (numHoles / 2); ++holeNum) {
         const tableHeaderData = ElementFactory.newTableHeaderCell(holeNum);
         tableHeaderRow.appendChild(tableHeaderData);
     }
 
-    // Add the label 'Totals' to the end of the table header row.
-    tableRowLabel = ElementFactory.newTableHeaderCell('Totals');
+    // Add the 'Out' subtotal column header
+    {
+        const tableHeaderData = ElementFactory.newTableHeaderCell(holeNum);
+        tableHeaderRow.appendChild(tableHeaderData);
+    }
+
+    // Add the hole numbers 10-18 as header cells for each hole's tee box info
+    for (let holeNum = (numHoles / 2) + 1; holeNum <= numHoles; ++holeNum) {
+        const tableHeaderData = ElementFactory.newTableHeaderCell(holeNum);
+        tableHeaderRow.appendChild(tableHeaderData);
+    }
+
+    // Add the 'Total' column label to the end of the table header row.
+    tableRowLabel = ElementFactory.newTableHeaderCell(LBL_TOTAL);
     tableHeaderRow.appendChild(tableRowLabel);
 
     return tableHeaderRow;
@@ -267,11 +344,11 @@ function renderCourseInfoTableRows(teeTypes, infoGrid) {
 
             // Create the tee type select button for the user
             const teeTypeSelectButton = ElementFactory.newButton(rowTeeType);
-            teeTypeSelectButton.addEventListener('click', handleClickTeeTypeButton)
+            teeTypeSelectButton.addEventListener(EV_CLICK, handleClickTeeTypeButton)
 
             // Create the table data cell to hold the select button
             const teeTypeTableDatum = ElementFactory.newTableDatumCell();
-            teeTypeTableDatum.setAttribute('rowspan', teeBoxNumData);
+            teeTypeTableDatum.setAttribute(ATTR_ROWSPAN, teeBoxNumData);
 
             // add the button to the cell
             teeTypeTableDatum.appendChild(teeTypeSelectButton);
@@ -314,7 +391,7 @@ function renderCourseInfoTableRows(teeTypes, infoGrid) {
         // Set the row class attribute as the tee type so we can selectively
         // show/hide the rows associated with the tee type that the user
         // selects.
-        tableRow.setAttribute('class', rowTeeType);
+        tableRow.setAttribute(ATTR_CLASS, rowTeeType);
 
         // Add the row to the array of rows we will be returning
         courseInfoTableRows.push(tableRow);
@@ -329,7 +406,7 @@ function renderCourseSelectionPage(courses) {
 
     // Add a 'prompt' option which can't be selected,
     // but will prompt the user to make a course selection.
-    const promptOption = ElementFactory.newSelectOption('Select a course:');
+    const promptOption = ElementFactory.newSelectOption(OPT_SELECT_COURSE);
     promptOption.selected = true;
     promptOption.disabled = true;
     courseSelect.appendChild(promptOption);
@@ -337,13 +414,13 @@ function renderCourseSelectionPage(courses) {
     // Add the available course options.
     courses.forEach(course => {
         const courseOption = ElementFactory.newSelectOption(course.name);
-        courseOption.setAttribute('id', course.id);
+        courseOption.setAttribute(ATTR_ID, course.id);
         courseSelect.appendChild(courseOption);
     })
 
     // Finished creating the course select dropdown.
     // Add its event listener and add it to the page.
-    courseSelect.addEventListener('change', handleChangeCourseSelect);
+    courseSelect.addEventListener(EV_CHANGE, handleChangeCourseSelect);
     document.body.appendChild(courseSelect);
 }
 
@@ -384,7 +461,7 @@ function handleChangeCourseSelect(event) {
 }
 
 function handleClickAddPlayerButton(event) {
-    const newPlayer = prompt('Add a player');
+    const newPlayer = prompt(BTN_LBL_ADD_PLAYER);
 
     // Reject the player if they have already been added.
     g_playerList.forEach(player => {
@@ -405,16 +482,16 @@ function handleClickAddPlayerButton(event) {
 
     // Add the new player.
     const newPlayerCell = ElementFactory.newTableDatumCell(newPlayer);
-    newPlayerCell.setAttribute('colspan', 2);
+    newPlayerCell.setAttribute(ATTR_COLSPAN, 2);
     newPlayerCell.style.textAlign = 'center';
     const newPlayerRow = ElementFactory.newTableRow();
     newPlayerRow.appendChild(newPlayerCell);
 
     // Add the empty score cells
-    const holeCount = MAX_HOLES;
+    const holeCount = VAL_MAX_HOLES;
     for (let i = 0; i < holeCount; ++i) {
         const scoreTableDatum = ElementFactory.newTableDatumCell();
-        scoreTableDatum.addEventListener('click', handleClickAddStrokes);
+        scoreTableDatum.addEventListener(EV_CLICK, handleClickAddStrokes);
         newPlayerRow.appendChild(scoreTableDatum);
     }
 
@@ -427,7 +504,7 @@ function handleClickAddPlayerButton(event) {
 function handleClickAddStrokes(event) {
     if (!g_playModeActive) { return; }
 
-    const strokes = prompt('How many strokes?');
+    const strokes = prompt(PR_GET_STROKE_COUNT);
 
     // Make sure the answer is numeric.
     if (!isNumeric(strokes)) {
