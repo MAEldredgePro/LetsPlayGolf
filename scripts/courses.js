@@ -70,7 +70,12 @@ const LBL_HCP = 'HCP';
 //#region Misc Constants
 const OPT_SELECT_COURSE = 'Select a course:';
 const PR_GET_STROKE_COUNT = 'How many strokes?';
-const VAL_MAX_HOLES = 18;
+const VAL_AUX_COLS = 3; // 'Out', 'In' and 'Total' columns
+const VAL_NUM_HOLES = 18;
+const VAL_OUT_COLNUM = 9;
+const VAL_IN_COLNUM = 19;
+const VAL_TOT_COLNUM = 20;
+const VAL_AUX_COLNUMS = [VAL_OUT_COLNUM, VAL_IN_COLNUM, VAL_TOT_COLNUM];
 //#endregion
 
 //#endregion Constants
@@ -350,12 +355,17 @@ function handleClickAddPlayerButton(event) {
     const newPlayerRow = ElementFactory.newTableRow();
     newPlayerRow.appendChild(newPlayerCell);
 
-    // Add the empty score cells
-    const holeCount = VAL_MAX_HOLES;
-    for (let i = 0; i < holeCount; ++i) {
-        const scoreTableDatum = ElementFactory.newTableDatumCell();
-        scoreTableDatum.addEventListener(EV_CLICK, handleClickAddStrokes);
-        newPlayerRow.appendChild(scoreTableDatum);
+    // Add the empty score and total score cells.  Only install a click handler
+    // on the user score cells.  The totals are computed automatically.
+    const columnCount = VAL_NUM_HOLES + VAL_AUX_COLS;
+    for (let col = 0; col < columnCount; ++col) {
+        const scoreTableCell = ElementFactory.newTableDatumCell('0');
+
+        if (!VAL_AUX_COLNUMS.includes(col)) {
+            scoreTableCell.addEventListener(EV_CLICK, handleClickAddStrokes);
+        }
+
+        newPlayerRow.appendChild(scoreTableCell);
     }
 
     courseInfoTable.appendChild(newPlayerRow);
@@ -366,9 +376,11 @@ function handleClickAddPlayerButton(event) {
 
 function handleClickAddStrokes(event) {
     if (!g_playModeActive) { return; }
+    const scoreCardCell = event.target;
 
     const strokes = prompt(PR_GET_STROKE_COUNT);
 
+    //#region Validate Stroke Input
     // Make sure the answer is numeric.
     if (!isNumeric(strokes)) {
         alert("I didn't recognize that as a number.");
@@ -381,14 +393,16 @@ function handleClickAddStrokes(event) {
         return;
     }
 
+    // Make sure the number of strokes is a whole number
     if (Math.floor(strokes) != strokes) {
         alert("A fractional number of strokes?  Nope.");
         return;
     }
+    //#endregion
 
-    const scoreTableDatum = event.target;
-    scoreTableDatum.innerHTML = strokes;
-    console.log(event.target);
+    scoreCardCell.innerHTML = strokes;
+
+    recomputeRowTotals(scoreCardCell.parentNode.cells);
 }
 
 function handleClickPlayButton() {
@@ -441,6 +455,39 @@ function isNumeric(str) {
     if (typeof str != "string") return false // we only process strings!
     return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+}
+
+function recomputeRowTotals(cells) {
+    const halfHoleCount = VAL_NUM_HOLES / 2;
+    let gameTotal = 0;
+
+    // compute the 'Out' total column value
+    const outFirstColOffset = 1;
+    let outTotalColOffset = outFirstColOffset + halfHoleCount;
+    let outTotal = 0;
+
+    for (let i = 0; i < halfHoleCount; i++) {
+        const cellValue = parseInt(cells[outFirstColOffset + i].innerText);
+        outTotal += cellValue;
+    }
+    cells[outTotalColOffset].innerText = outTotal;
+    gameTotal += outTotal;
+
+    // compute the 'In' total column value
+    const inFirstColOffset = outTotalColOffset + 1;
+    const inTotalColOffset = inFirstColOffset + halfHoleCount;
+    let inTotal = 0;
+
+    for (let i = 0; i < halfHoleCount; i++) {
+        const cellValue = parseInt(cells[inFirstColOffset + i].innerText);
+        console.log(cellValue);
+        inTotal += cellValue;
+    }
+    cells[inTotalColOffset].innerText = inTotal;
+    gameTotal += inTotal;
+
+    const gameTotalColOffset = inTotalColOffset + 1;
+    cells[gameTotalColOffset].innerText = (outTotal + inTotal);
 }
 
 function removeControlButtons(courseInfoTable) {
