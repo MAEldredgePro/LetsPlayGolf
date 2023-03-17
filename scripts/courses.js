@@ -206,6 +206,7 @@ function appendPlayButton(courseInfoTable) {
     courseInfoTable.appendChild(playButtonRow);
 }
 
+// Add a cell to an existing table row with the given innerText as its content
 function appendTableDatum(tableRow, innerText) {
     const tableDatum = ElementFactory.newTableDatumCell(innerText);
     tableRow.appendChild(tableDatum);
@@ -257,7 +258,7 @@ function createCourseInfoTableHeaderRow(numHoles) {
     return tableHeaderRow;
 }
 
-function createTeeTypeTableDatum(rowTeeType, numDataRowsPerTeeType) {
+function createTeeTypeButtonCell(rowTeeType, numDataRowsPerTeeType) {
     // Create the tee type select button for the user
     const teeTypeSelectButton = ElementFactory.newButton(rowTeeType);
     teeTypeSelectButton.addEventListener(EV_CLICK, handleClickTeeTypeButton)
@@ -374,7 +375,7 @@ function renderCourseInfoTableRows(teeTypes, infoGrid) {
             // (ex: pro, champion, men's, women's) they would like to use
             // for the game they are about to play.
             const teeTypeTableDatum =
-                createTeeTypeTableDatum(rowTeeType, numDataRowsPerTeeType);
+                createTeeTypeButtonCell(rowTeeType, numDataRowsPerTeeType);
 
             // add the cell to the row
             tableRow.appendChild(teeTypeTableDatum);
