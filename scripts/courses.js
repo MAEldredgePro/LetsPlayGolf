@@ -454,15 +454,15 @@ function renderCourseInfoTableRows(teeTypes, infoGrid) {
     // not lend itself well to creating HTML as-you-go (which is row-wise)
     // so we have to build something in-memory that we can traverse row-wise.
 
-    // initialize the row array we will be returning
+    // initialize the row array we will be populating and returning
     const courseInfoTableRows = [];
 
     // Turn the infoGrid on its side and iterate the data.
     const numRows = infoGrid[0].length;
+    const numDataRowsPerTeeType = TeeBoxInfo.datumLabels.length;
     for (let j = 0; j < numRows; ++j) {
         const tableRow = ElementFactory.newTableRow();
 
-        const numDataRowsPerTeeType = TeeBoxInfo.datumLabels.length;
         const teeBoxDatumSelector = j % numDataRowsPerTeeType;
         const onFirstRowOfTeeTypeData = (teeBoxDatumSelector === 0);
         let rowTeeType;
@@ -490,36 +490,47 @@ function renderCourseInfoTableRows(teeTypes, infoGrid) {
             tableRow.appendChild(teeTypeTableDatum);
         }
 
+        // Add the datum label ('Yards', 'Par', 'HCP') to the table row.
         const rowLabel = TeeBoxInfo.datumLabels[teeBoxDatumSelector];
         tableRow.appendChild(ElementFactory.newTableDatumCell(rowLabel));
 
-        let outHalfGameTotal;
-        let halfGameTotalTableDatum;
-        let rowTotal = 0;
         const numColumns = infoGrid.length;
-        for (let i = 0; i < numColumns; ++i) {
-            // Halfway through iterating the columns, add the first half game
-            // total cell (the 'Out' value cell)
-            if (halfGameTotalTableDatum && (i >= numColumns / 2)) {
-                outHalfGameTotal = rowTotal;
-                appendTableDatum(tableRow, outHalfGameTotal);
-            }
 
+        // Keep a running total for the 'Out', 'In', and 'Total' columns.
+        let runningTotal = 0;
+
+        // Iterate the first half of the columns and add their values
+        // to the table.
+        for (let i = 0; i < (numColumns / 2); ++i) {
             // Append the cell with the current info grid data
             appendTableDatum(tableRow, infoGrid[i][j]);
 
             // Keep a running total of the row values
-            rowTotal += infoGrid[i][j];
-
+            runningTotal += infoGrid[i][j];
         }
 
-        // After iterating the columns, add the second half game total cell
-        // (the 'In' value cell)
-        const inHalfGameTotal = rowTotal - outHalfGameTotal;
-        appendTableDatum(tableRow, inHalfGameTotal);
+        // Halfway through iterating the columns, add the 'Out' half-game
+        // total cell.
+        const outRunningTotal = runningTotal;
+        runningTotal = 0;
+        appendTableDatum(tableRow, outRunningTotal);
 
-        // Add a total cell at the end of the row
-        appendTableDatum(tableRow, rowTotal);
+        // Iterate the second half of the columns and add their values
+        // to the table.
+        for (let i = (numColumns / 2); i < numColumns; ++i) {
+            // Append the cell with the current info grid data
+            appendTableDatum(tableRow, infoGrid[i][j]);
+
+            // Keep a running total of the row values
+            runningTotal += infoGrid[i][j];
+        }
+
+        // Add the 'In' half-game total cell
+        const inRunningTotal = runningTotal;
+        appendTableDatum(tableRow, inRunningTotal);
+
+        // Add the full-game 'Total' cell at the end of the row
+        appendTableDatum(tableRow, outRunningTotal + inRunningTotal);
 
         // Set the row class attribute as the tee type so we can selectively
         // show/hide the rows associated with the tee type that the user
