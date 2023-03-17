@@ -3,21 +3,23 @@ A mobile-friendly golf score keeping app
 
 ---
 ## Actively Developing Requirement(s)
- - [ ] (4pt) Create the main scoring table with the following columns:
-   - [ ] col for course totals
+ - [ ] (4pt) Create a row for each player to to keep track of their per-hole and
+cumulative scores.
+   - [x] This row should allow users to enter their name and a per-hole score.
+   - [ ] When a user enters a score for a hole, the 'out', 'in', and course
 
 ---
 ## Requirements
  - [ ] (2pt) Use the golf data API to bring in the data for the golf course(s).
    - [ ] Unable to get golf data API working as of yet.
    - [x] Using 'fetch' to download my own copy of the data from GitHub Pages
- - [ ] (4pt) Create the main scoring table with the following columns:
+ - [x] (4pt) Create the main scoring table with the following columns:
    - [x] col for row name (Hole, Yardage, Par, Handicap, PlayerName)
    - [x] cols for holes 1-9
-   - [ ] col for 'out' totals
+   - [x] col for 'out' totals
    - [x] cols for holes 10-18
-   - [ ] col for 'in' totals
-   - [ ] col for course totals
+   - [x] col for 'in' totals
+   - [x] col for course totals
  - [x] (5pt) Create the following rows and populate from course data:
    - [x] hole number
    - [x] hole yardage
