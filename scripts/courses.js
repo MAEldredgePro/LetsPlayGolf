@@ -315,6 +315,115 @@ function generateInfoGrid(holesData) {
     return infoGrid;
 }
 
+function handleChangeCourseSelect(event) {
+    const courseSelect = event.target;
+    const courseID = courseSelect[courseSelect.selectedIndex].id;
+    g_playerList.length = 0;
+    fetchCourseInfo(courseID);
+    // The fetch registers a callback that will render the course info.
+}
+
+function handleClickAddPlayerButton(event) {
+    const newPlayer = prompt(BTN_LBL_ADD_PLAYER);
+
+    // Reject the player if they have already been added.
+    g_playerList.forEach(player => {
+        if (newPlayer.toLowerCase() === player.toLowerCase()) {
+            alert(`${player} has already been added`);
+            return;
+        }
+    })
+
+    // Add the player to our internal player list.
+    g_playerList.push(newPlayer);
+
+    // Get the course info table.
+    const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
+
+    // Remove the control buttons
+    removeControlButtons(courseInfoTable);
+
+    // Add the new player.
+    const newPlayerCell = ElementFactory.newTableDatumCell(newPlayer);
+    newPlayerCell.setAttribute(ATTR_COLSPAN, 2);
+    newPlayerCell.style.textAlign = 'center';
+    const newPlayerRow = ElementFactory.newTableRow();
+    newPlayerRow.appendChild(newPlayerCell);
+
+    // Add the empty score cells
+    const holeCount = VAL_MAX_HOLES;
+    for (let i = 0; i < holeCount; ++i) {
+        const scoreTableDatum = ElementFactory.newTableDatumCell();
+        scoreTableDatum.addEventListener(EV_CLICK, handleClickAddStrokes);
+        newPlayerRow.appendChild(scoreTableDatum);
+    }
+
+    courseInfoTable.appendChild(newPlayerRow);
+
+    // Re-add the control buttons.
+    appendControlButtons(courseInfoTable);
+}
+
+function handleClickAddStrokes(event) {
+    if (!g_playModeActive) { return; }
+
+    const strokes = prompt(PR_GET_STROKE_COUNT);
+
+    // Make sure the answer is numeric.
+    if (!isNumeric(strokes)) {
+        alert("I didn't recognize that as a number.");
+        return;
+    }
+
+    // Make sure the answer is positive
+    if (strokes < 1) {
+        alert("Oh come on, man!  Nobody is that good.");
+        return;
+    }
+
+    if (Math.floor(strokes) != strokes) {
+        alert("A fractional number of strokes?  Nope.");
+        return;
+    }
+
+    const scoreTableDatum = event.target;
+    scoreTableDatum.innerHTML = strokes;
+    console.log(event.target);
+}
+
+function handleClickPlayButton() {
+    const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
+    removeControlButtons(courseInfoTable);
+    alert("Let's Play Golf!");
+    g_playModeActive = true;
+}
+
+function handleClickTeeTypeButton(event) {
+    const selectedTeeType = event.target.innerText;
+    // console.log(`'${selectedTeeType}' button clicked`);
+
+    // Get the course info table.
+    const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
+
+    // Hide all of the rows except the ones belonging to the selected tee type.
+    let curClassName = '';
+    for (row of courseInfoTable.rows) {
+        if (row.className != 'undefined') {
+            curClassName = row.className
+        }
+
+        // Leave the header row and the selected tee rows alone.
+        if (curClassName === CLS_HEADER) { continue; }
+        if (curClassName === selectedTeeType) { continue; }
+
+        // Hide the rows we don't care about.
+        row.style.display = 'none';
+    }
+
+    // Add the control buttons.
+    appendControlButtons(courseInfoTable);
+}
+
 function installCourseInfoTable(newCourseInfoTable) {
     // remove the old course info table
     const oldCourseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
@@ -474,113 +583,4 @@ function updateCourseDataTable(holesData) {
 
     // Drop in the new course info table.
     installCourseInfoTable(courseInfoTable);
-}
-
-function handleChangeCourseSelect(event) {
-    const courseSelect = event.target;
-    const courseID = courseSelect[courseSelect.selectedIndex].id;
-    g_playerList.length = 0;
-    fetchCourseInfo(courseID);
-    // The fetch registers a callback that will render the course info.
-}
-
-function handleClickAddPlayerButton(event) {
-    const newPlayer = prompt(BTN_LBL_ADD_PLAYER);
-
-    // Reject the player if they have already been added.
-    g_playerList.forEach(player => {
-        if (newPlayer.toLowerCase() === player.toLowerCase()) {
-            alert(`${player} has already been added`);
-            return;
-        }
-    })
-
-    // Add the player to our internal player list.
-    g_playerList.push(newPlayer);
-
-    // Get the course info table.
-    const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
-
-    // Remove the control buttons
-    removeControlButtons(courseInfoTable);
-
-    // Add the new player.
-    const newPlayerCell = ElementFactory.newTableDatumCell(newPlayer);
-    newPlayerCell.setAttribute(ATTR_COLSPAN, 2);
-    newPlayerCell.style.textAlign = 'center';
-    const newPlayerRow = ElementFactory.newTableRow();
-    newPlayerRow.appendChild(newPlayerCell);
-
-    // Add the empty score cells
-    const holeCount = VAL_MAX_HOLES;
-    for (let i = 0; i < holeCount; ++i) {
-        const scoreTableDatum = ElementFactory.newTableDatumCell();
-        scoreTableDatum.addEventListener(EV_CLICK, handleClickAddStrokes);
-        newPlayerRow.appendChild(scoreTableDatum);
-    }
-
-    courseInfoTable.appendChild(newPlayerRow);
-
-    // Re-add the control buttons.
-    appendControlButtons(courseInfoTable);
-}
-
-function handleClickAddStrokes(event) {
-    if (!g_playModeActive) { return; }
-
-    const strokes = prompt(PR_GET_STROKE_COUNT);
-
-    // Make sure the answer is numeric.
-    if (!isNumeric(strokes)) {
-        alert("I didn't recognize that as a number.");
-        return;
-    }
-
-    // Make sure the answer is positive
-    if (strokes < 1) {
-        alert("Oh come on, man!  Nobody is that good.");
-        return;
-    }
-
-    if (Math.floor(strokes) != strokes) {
-        alert("A fractional number of strokes?  Nope.");
-        return;
-    }
-
-    const scoreTableDatum = event.target;
-    scoreTableDatum.innerHTML = strokes;
-    console.log(event.target);
-}
-
-function handleClickPlayButton() {
-    const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
-    removeControlButtons(courseInfoTable);
-    alert("Let's Play Golf!");
-    g_playModeActive = true;
-}
-
-function handleClickTeeTypeButton(event) {
-    const selectedTeeType = event.target.innerText;
-    // console.log(`'${selectedTeeType}' button clicked`);
-
-    // Get the course info table.
-    const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
-
-    // Hide all of the rows except the ones belonging to the selected tee type.
-    let curClassName = '';
-    for (row of courseInfoTable.rows) {
-        if (row.className != 'undefined') {
-            curClassName = row.className
-        }
-
-        // Leave the header row and the selected tee rows alone.
-        if (curClassName === CLS_HEADER) { continue; }
-        if (curClassName === selectedTeeType) { continue; }
-
-        // Hide the rows we don't care about.
-        row.style.display = 'none';
-    }
-
-    // Add the control buttons.
-    appendControlButtons(courseInfoTable);
 }
