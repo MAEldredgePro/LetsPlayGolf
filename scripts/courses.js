@@ -124,7 +124,7 @@ function createCourseInfoTableHeaderRow(numHoles) {
 }
 
 function fetchCourseInfo(courseID) {
-    fetch(courseDataURL(courseID))
+    fetch(COURSE_DATA_URL(courseID))
         .then(response => response.json())
         .then(courseData => renderCourseData(courseData.data.holes));
 }
