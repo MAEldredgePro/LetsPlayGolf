@@ -120,6 +120,11 @@ function createCourseInfoTableHeaderRow(numHoles) {
         tableHeaderRow.appendChild(tableHeaderData);
     }
 
+    // Add the label 'Totals' to the end of the table header row.
+    tableRowLabel = newElement('th');
+    tableRowLabel.innerText = 'Totals';
+    tableHeaderRow.appendChild(tableRowLabel);
+
     return tableHeaderRow;
 }
 
@@ -231,12 +236,12 @@ function renderCourseData(holesData) {
 
         const teeBoxNumData = TeeBoxInfo.datumLabels.length;
         const teeBoxDatumSelector = j % teeBoxNumData;
-        let classAttrValue;
+        let rowTeeType;
 
         if (0 == teeBoxDatumSelector) {
             const teeType = teeTypes[Math.floor(j / teeBoxNumData)];
             // console.log(`teeType: ${teeType}`);
-            classAttrValue = teeType;
+            rowTeeType = teeType;
 
             const teeTypeTableDatum = newElement('td');
             teeTypeTableDatum.setAttribute('rowspan', teeBoxNumData);
@@ -252,16 +257,29 @@ function renderCourseData(holesData) {
         rowLabelTableDatum.innerText = TeeBoxInfo.datumLabels[teeBoxDatumSelector];
         tableRow.appendChild(rowLabelTableDatum);
 
+        let rowTotal = 0;
         const numColumns = infoGrid.length;
         for (let i = 0; i < numColumns; ++i) {
+            // Create the table cell and fill it
             const tableDatum = newElement('td');
             tableDatum.innerText = infoGrid[i][j];
-
             tableRow.appendChild(tableDatum);
+
+            // Keep a running total of the row values
+            rowTotal += infoGrid[i][j];
         }
 
-        tableRow.setAttribute('class', classAttrValue);
+        // Add a total cell at the end of the row
+        const tableDatum = newElement('td');
+        tableDatum.innerText = rowTotal;
+        tableRow.appendChild(tableDatum);
 
+        // Set the row class attribute as the tee type so we can selectively
+        // show/hide the rows associated with the tee type that the user
+        // selects.
+        tableRow.setAttribute('class', rowTeeType);
+
+        // Add the row to the table.
         courseInfoTable.appendChild(tableRow);
     }
 
