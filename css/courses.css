@@ -6,4 +6,8 @@ body {
 td {
   background-color: white;
   text-align: right;
+}
+
+button {
+  width: 100%;
 }/*# sourceMappingURL=courses.css.map */
