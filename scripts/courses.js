@@ -171,11 +171,176 @@ const g_playerList = [];
 // Global Excutable Code //
 //-----------------------//
 
-// Code run when the script is loaded.  The only thing it does is register
-// the (main-ish) function to be called once the html has finished loading.
+// Register the entry point code to run when the html window has
+// finished loading.
 window.onload = fetchCourseList;
 
 //#endregion
+
+//#region Documentation
+//============================================================================//
+// This next section is for documentation purposes only.  It helps me keep    //
+// track of what I've done so I can find the code I'm looking for more easily //
+// when I want to make changes.  It is a 'functional directory'.              //
+//============================================================================//
+
+const functionCallTree = [
+    //#region Flow
+    //========================================================================//
+    // The window finishes loading, and the registered callback,              //
+    // 'fetchCourseList' is called.                                           //
+    //========================================================================//
+    //#endregion
+    fetchCourseList,
+    //#region Docs
+    // fetchCourseList is the main entry point that is registered as the
+    // window.onload callback.  As soon as the window has finished loading,
+    // this function gets called to get the ball rolling.
+    //
+    // fetchCourseList initiates a network request (using the fetch api)
+    // for the purpose of downloading the list of available golf courses.
+    // As part of the 'fetch' API call, fetCourseListData registers a callback
+    // function (renderCourseSelect) which will be called when the
+    // network request returns so it (the callback function) can process the
+    // returned course list data.
+    //
+    // TL;DR fetchCourseList calls 'fetch' and registers the callback
+    // renderCourseSelect then terminates.
+    //
+    //#endregion
+    /* fetchCourseList registers callback */ renderCourseSelect,
+
+    //#region Flow
+    //========================================================================//
+    //                       Waiting on network request                       //
+    //========================================================================//
+    // When the fetchCourseList function terminated, we yielded control back  //
+    // to the browser. The User Interface can now continue to operate while   //
+    // both the our code and the user wait for the network request to return. //
+    //========================================================================//
+
+    //.......................... a few moments later .........................//
+
+    //========================================================================//
+    // The network request finishes, and the registered callback,             //
+    // 'renderCourseSelect' is called with the course info data.       //
+    //========================================================================//
+    //#endregion
+    renderCourseSelect,
+    //#region Docs
+    // renderCourseSelect creates a dropdown list of the available golf
+    // courses and registers the 'handleUserChoseAGolfCourse' callback
+    // function on the (HTML <select>) dropdown object.
+    //
+    // The 'handleUserChoseAGolfCourse' callback will be triggered any time
+    // the user chooses or changes their golf course selection in the dropdown.
+    //
+    // TL;DR fetchCourseList calls 'fetch' and registers the callback
+    // renderCourseSelect then terminates.
+
+    // TL;DR renderCourseSelect gives the users a way to choose a golf
+    // course and registers the 'handleUserChoseAGolfCourse' to act when they
+    // make a choice, then terminates, yielding control back to the browser.
+    //
+    //#endregion
+    /* renderCourseSelect registers callback */ handleUserChoseAGolfCourse,
+
+    //#region Flow
+    //========================================================================//
+    //                          Waiting on user input                         //
+    //========================================================================//
+    // The 'renderCourseSelect' function terminates and we yield       //
+    // control back to the browser. The User Interface continues to operate   //
+    // while the entire universe twiddles their collective 'thumbs' while     //
+    // waiting for the user to make a selection.                              //
+    //========================================================================//
+
+    //.......................... a few moments later .........................//
+
+    //========================================================================//
+    // The user has chosen a golf course from the dropdown which has          //
+    // triggered a call to handleUserChoseAGolfCourse                         //
+    //========================================================================//
+    //#endregion
+    handleUserChoseAGolfCourse,
+    //#region Docs
+    // handleUserChoseAGolfCourse captures the user's requested courseID and
+    // initiates a network 'fetch' for the course's data.
+    //
+    // As part of the 'fetch' API call, handleUserChoseAGolfCourse registers a
+    // callback function which will be called when the network request returns.
+    //
+    // The callback function (renderCourseData) will then draw for the user the
+    // course data that was fetched asynchronously from the network and is now
+    // available.
+    //
+    // TL;DR handleUserChoseAGolfCourse initiates a asynchronous 'fetch' of some
+    // data from the network. As part of the 'fetch' protcol, a callback,
+    // 'renderCourseData', is passed in.  It gets registered as the function
+    // that the 'fetch' mechanism will call with the returned data.
+    //#endregion
+    fetchCourseData,
+
+    fetchCourseData,
+    renderCourseData,
+
+    renderCourseData,
+    createCourseInfoTable,
+    createCourseInfoTableHeaderRow,
+    generateInfoGrid,   // heavy lifting of data from json to infoGrid
+    renderCourseInfoTableRows, // build table rows from infoGrid
+    installCourseInfoTable,
+
+    renderCourseInfoTableRows,
+    createTeeTypeCell,
+    handleClickTeeTypeButton,
+
+    handleClickTeeTypeButton,
+    appendControlButtons,
+
+    appendControlButtons,
+    appendAddPlayerButton,
+    appendPlayButton,
+
+    appendAddPlayerButton,
+    handleClickAddPlayerButton,
+
+    handleClickAddPlayerButton,
+    handleClickAddStrokes,
+
+    appendPlayButton,
+    handleClickPlayButton,
+
+    renderCourseInfoTableRows,
+
+
+];
+
+const functionTOC = [
+    appendAddPlayerButton,
+    appendControlButtons,
+    appendPlayButton,
+    appendTableDatum,
+    createCourseInfoTable,
+    createCourseInfoTableHeaderRow,
+    createTeeTypeCell,
+    fetchCourseData,
+    fetchCourseList,
+    generateInfoGrid,
+    handleUserChoseAGolfCourse,
+    handleClickAddPlayerButton,
+    handleClickAddStrokes,
+    handleClickPlayButton,
+    handleClickTeeTypeButton,
+    installCourseInfoTable,
+    isNumeric,
+    recomputeRowTotals,
+    removeControlButtons,
+    renderCourseInfoTableRows,
+    renderCourseSelect,
+    renderCourseData,
+];
+//#endregion Documentation
 
 //| Function Definitions |
 //|======================|
@@ -282,10 +447,10 @@ function createTeeTypeCell(rowTeeType, numDataRowsPerTeeType) {
     return teeTypeTableDatum;
 }
 
-function fetchCourseInfo(courseID) {
+function fetchCourseData(courseID) {
     fetch(COURSE_DATA_URL(courseID))
         .then(response => response.json())
-        .then(courseData => updateCourseDataTable(courseData.data.holes));
+        .then(courseData => renderCourseData(courseData.data.holes));
 }
 
 function fetchCourseList() {
@@ -293,7 +458,7 @@ function fetchCourseList() {
     // call back a function to render the course selection page.
     fetch(COURSE_LIST_URL)
         .then(response => response.json())
-        .then(courseList => renderCourseSelectionPage(courseList));
+        .then(courseList => renderCourseSelect(courseList));
 }
 
 function generateInfoGrid(holesData) {
@@ -324,12 +489,12 @@ function generateInfoGrid(holesData) {
     return infoGrid;
 }
 
-function handleChangeCourseSelect(event) {
+function handleUserChoseAGolfCourse(event) {
     const courseSelect = event.target;
     const courseID = courseSelect[courseSelect.selectedIndex].id;
     g_playerList.length = 0;
     document.body.style.backgroundImage = `url('https://maeldredgepro.github.io/LetsPlayGolf/images/${courseID}.jpg')`;
-    fetchCourseInfo(courseID);
+    fetchCourseData(courseID);
     // The fetch registers a callback that will render the course info.
 }
 
@@ -508,7 +673,7 @@ function removeControlButtons(courseInfoTable) {
     }
 }
 
-function renderCourseInfoTableRows(teeTypes, infoGrid) {
+function renderCourseInfoTableRows(teeBoxInfos, infoGrid) {
     // Iterate the holes 1-18. This is a column-wise iteration which does
     // not lend itself well to creating HTML as-you-go (which is row-wise)
     // so we have to build something in-memory that we can traverse row-wise.
@@ -520,33 +685,60 @@ function renderCourseInfoTableRows(teeTypes, infoGrid) {
     const numRows = infoGrid[0].length;
     const numDataRowsPerTeeType = TeeBoxInfo.datumLabels.length;
     for (let j = 0; j < numRows; ++j) {
+        // Create the new table row DOM object.
         const tableRow = ElementFactory.newTableRow();
 
+        // Compute some values that will help us do some special handling
+        // if this row meets certain conditions.
+        const teeTypeSelector = Math.floor(j / numDataRowsPerTeeType);
         const teeBoxDatumSelector = j % numDataRowsPerTeeType;
         const onFirstRowOfTeeTypeData = (teeBoxDatumSelector === 0);
-        let rowTeeType;
 
-        // The tee type button table cell spans multiple rows.
+        if (onFirstRowOfTeeTypeData) {
+            // Save the tee type for use in all the rows associated with this
+            // tee type.  We have several datum per tee type that each get their
+            // own row (yards, par, hcp, maybe more to come?)
+            let teeTypeRowGroupInfo = teeBoxInfos[teeTypeSelector];
+        }
+
+        //#region Documentation
+        // The tee type button table cell spans all the rows containing data
+        // points associated with a given tee type.
         // If we are at the first of a set of rows all of which
         // contain data for the current tee type, render the
-        // tee type button cell (tee type table datum) which spans
-        // all the rows containing data for this tee type.
+        // tee type button cell (in the tee type table column) which spans
+        // vertically down across all the tee type column cells whose rows
+        // contain data for this tee type.
+        // these are the 'pro' and 'amt' cells in the following example, which
+        // would have a rowspan of '3'.
+        // ===================================...
+        // |  hole   | 1 | 2 | 3 | 4 | 5 | 6 |...
+        // ===================================...
+        // |     |YRD|py1|py2|py3|py4|py5|py6|...
+        // |     |============================...
+        // | pro |PAR|ph1|ph2|ph3|ph4|ph5|ph6|...
+        // |     |============================...
+        // |     |HCP|ph1|ph2|ph3|ph4|ph5|ph6|...
+        // ===================================...
+        // |     |YRD|ay1|ay2|ay3|ay4|ay5|ay6|...
+        // |     |============================...
+        // | amt |PAR|ah1|ah2|ah3|ah4|ah5|ah6|...
+        // |     |============================...
+        // |     |HCP|ah1|ah2|ah3|ah4|ah5|ah6|...
+        // ===================================...
+        //#endregion
         if (onFirstRowOfTeeTypeData) {
-            const teeTypeSelector = j / numDataRowsPerTeeType;
-
-            // Save the current tee type so we can set the class attribute for
-            // all the rows containing the data associated with this tee type
-            rowTeeType = teeTypes[teeTypeSelector];
-
-            // create the table datum (td) that contains the tee type
-            // selection button so the user can choose which tee type
+            // create the cell for the tee type selection button
+            //#region Documentation
+            // This button allows the user to choose which tee type
             // (ex: pro, champion, men's, women's) they would like to use
             // for the game they are about to play.
-            const teeTypeTableDatum =
-                createTeeTypeCell(rowTeeType, numDataRowsPerTeeType);
+            //#endregion
+            const teeTypeButtonCell =
+                createTeeTypeCell(teeTypeRowGroupInfo, numDataRowsPerTeeType);
 
-            // add the cell to the row
-            tableRow.appendChild(teeTypeTableDatum);
+            // ...and add the cell to the row
+            tableRow.appendChild(teeTypeButtonCell);
         }
 
         // Add the datum label ('Yards', 'Par', 'HCP') to the table row.
@@ -594,7 +786,7 @@ function renderCourseInfoTableRows(teeTypes, infoGrid) {
         // Set the row class attribute as the tee type so we can selectively
         // show/hide the rows associated with the tee type that the user
         // selects.
-        tableRow.setAttribute(ATTR_CLASS, rowTeeType);
+        tableRow.setAttribute(ATTR_CLASS, teeTypeRowGroupInfo.teeType);
 
         // Add the row to the array of rows we will be returning
         courseInfoTableRows.push(tableRow);
@@ -604,7 +796,7 @@ function renderCourseInfoTableRows(teeTypes, infoGrid) {
     return courseInfoTableRows;
 }
 
-function renderCourseSelectionPage(courses) {
+function renderCourseSelect(courses) {
     const courseSelect = ElementFactory.newSelectDropdown();
 
     // Add a 'prompt' option which can't be selected,
@@ -623,17 +815,19 @@ function renderCourseSelectionPage(courses) {
 
     // Finished creating the course select dropdown.
     // Add its event listener and add it to the page.
-    courseSelect.addEventListener(EV_CHANGE, handleChangeCourseSelect);
+    courseSelect.addEventListener(EV_CHANGE, handleUserChoseAGolfCourse);
     document.body.appendChild(courseSelect);
 }
 
-function updateCourseDataTable(holesData) {
+function renderCourseData(holesData) {
     // Helper function to gather the tee types from the holesData
-    function getTeeTypes(holesData) {
-        const teeBoxes = holesData[0].teeBoxes
-        const teeTypes = [];
-        teeBoxes.forEach(teeBox => { teeTypes.push(teeBox.teeType); })
-        return teeTypes;
+    function getTeeBoxInfos(holesData) {
+        const teeBoxInfos = [];
+        holesData[0].teeBoxes.forEach(teeBoxData => {
+            const teeBoxInfo = new TeeBoxInfo(teeBoxData);
+            teeBoxInfos.push(teeBoxInfo);
+        })
+        return teeBoxInfos;
     }
 
     // Create the course info table.
@@ -644,9 +838,11 @@ function updateCourseDataTable(holesData) {
     courseInfoTable.appendChild(tableHeaderRow);
 
     // render and add the course info table data rows
-    const teeTypes = getTeeTypes(holesData);
+    // const teeTypes = getTeeBoxInfos(holesData).map(tBxInf => tBxInf.teeType);
+    const teeBoxInfos = getTeeBoxInfos(holesData);
+
     const infoGrid = generateInfoGrid(holesData);
-    const courseInfoTableRows = renderCourseInfoTableRows(teeTypes, infoGrid);
+    const courseInfoTableRows = renderCourseInfoTableRows(teeBoxInfos, infoGrid);
     courseInfoTableRows.forEach(row => {
         courseInfoTable.appendChild(row);
     })
