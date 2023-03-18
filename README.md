@@ -4,6 +4,10 @@ A mobile-friendly golf score keeping app
 ---
 ## Actively Developing Requirement(s)
  - [ ] (3pt) Add some CSS to style the card to look like an actual golf card.
+   - [x] Add background images to courses screen
+     - [x] Custom image for each golf course
+   - [x] Make it easier to read hole numbers by providing a semi-transparent table background color
+   - [ ] Add tee-type colors provided in the the course info json
 
 ---
 ## Requirements
