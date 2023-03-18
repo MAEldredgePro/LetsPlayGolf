@@ -701,7 +701,7 @@ function renderCourseInfoTableRows(teeBoxInfos, infoGrid) {
             let teeTypeRowGroupInfo = teeBoxInfos[teeTypeSelector];
         }
 
-        //#region Documentation
+        //#region Why we need a spanning table cell
         // The tee type button table cell spans all the rows containing data
         // points associated with a given tee type.
         // If we are at the first of a set of rows all of which
@@ -727,17 +727,16 @@ function renderCourseInfoTableRows(teeBoxInfos, infoGrid) {
         // |     |HCP|ah1|ah2|ah3|ah4|ah5|ah6|...
         // ===================================...
         //#endregion
+        // TL;DR Create the tee type button row spanning cell
         if (onFirstRowOfTeeTypeData) {
-            // create the cell for the tee type selection button
-            //#region Documentation
+            //#region What's this button do?
             // This button allows the user to choose which tee type
             // (ex: pro, champion, men's, women's) they would like to use
             // for the game they are about to play.
             //#endregion
+            // TL;DR Create the tee type button cell and add it to the row
             const teeTypeButtonCell =
                 createTeeTypeCell(teeTypeRowGroupInfo, numDataRowsPerTeeType);
-
-            // ...and add the cell to the row
             tableRow.appendChild(teeTypeButtonCell);
         }
 
