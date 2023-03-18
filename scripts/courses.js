@@ -60,7 +60,7 @@ const EV_CLICK = 'click';
 const LBL_HOLE = 'Hole';
 const LBL_IN = 'In';
 const LBL_OUT = 'Out';
-const LBL_TEE = 'Tee';
+const LBL_TEES = 'Tees';
 const LBL_TOTAL = 'Total'
 const LBL_YARDS = 'Yards';
 const LBL_PAR = 'Par';
@@ -225,7 +225,7 @@ function createCourseInfoTableHeaderRow(numHoles) {
     const tableHeaderRow = ElementFactory.newTableRow(CLS_HEADER);
 
     // Add the 'Tee' column label to the table header row.
-    let tableRowLabel = ElementFactory.newTableHeaderCell(LBL_TEE);
+    let tableRowLabel = ElementFactory.newTableHeaderCell(LBL_TEES);
     tableHeaderRow.appendChild(tableRowLabel);
 
     // Add the 'Hole' column label to the table header row.

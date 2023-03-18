@@ -1,1 +1,1 @@
-{"version":3,"sources":["../courses.scss","courses.css"],"names":[],"mappings":"AAAA;EACI,sBAAA;EACA,SAAA;ACCJ;;ADEA;EACI,uBAAA;EACA,iBAAA;ACCJ;;ADEA;EACI,WAAA;ACCJ","file":"courses.css"}
+{"version":3,"sources":["../courses.scss","courses.css"],"names":[],"mappings":"AAAA;EACI,aAAA;EACA,sBAAA;EACA,SAAA;EACA,aAAA;EACA,sBAAA;EACA,mBAAA;EACA,uBAAA;ACCJ;;ADMA;EACI,uBAAA;EACA,iBAAA;EACA,YAAA;ACHJ;;ADMA;EACI,WAAA;EACA,YAAA;ACHJ","file":"courses.css"}
