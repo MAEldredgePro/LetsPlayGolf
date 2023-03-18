@@ -328,7 +328,7 @@ function handleChangeCourseSelect(event) {
     const courseSelect = event.target;
     const courseID = courseSelect[courseSelect.selectedIndex].id;
     g_playerList.length = 0;
-    document.body.style.backgroundImage = `url('../images/${courseID}.jpg')`;
+    document.body.style.backgroundImage = `url('https://maeldredgepro.github.io/LetsPlayGolf/images/${courseID}.jpg')`;
     fetchCourseInfo(courseID);
     // The fetch registers a callback that will render the course info.
 }
