@@ -140,11 +140,12 @@ class TeeBoxInfo {
     ];
 
     constructor(teeBoxData) {
+        this.teeType = teeBoxData.teeType;
+        this.hexColor = teeBoxData.teeHexColor;
         this.hole = teeBoxData.hole;
         this.yards = teeBoxData.yards;
         this.par = teeBoxData.par;
         this.hcp = teeBoxData.hcp;
-        this.teeType = teeBoxData.teeType;
     }
 
     GetDatum(selector) {
@@ -693,13 +694,7 @@ function renderCourseInfoTableRows(teeBoxInfos, infoGrid) {
         const teeTypeSelector = Math.floor(j / numDataRowsPerTeeType);
         const teeBoxDatumSelector = j % numDataRowsPerTeeType;
         const onFirstRowOfTeeTypeData = (teeBoxDatumSelector === 0);
-
-        if (onFirstRowOfTeeTypeData) {
-            // Save the tee type for use in all the rows associated with this
-            // tee type.  We have several datum per tee type that each get their
-            // own row (yards, par, hcp, maybe more to come?)
-            let teeTypeRowGroupInfo = teeBoxInfos[teeTypeSelector];
-        }
+        let curTeeBoxInfo = teeBoxInfos[teeTypeSelector];
 
         //#region Why we need a spanning table cell
         // The tee type button table cell spans all the rows containing data
@@ -736,7 +731,11 @@ function renderCourseInfoTableRows(teeBoxInfos, infoGrid) {
             //#endregion
             // TL;DR Create the tee type button cell and add it to the row
             const teeTypeButtonCell =
-                createTeeTypeCell(teeTypeRowGroupInfo, numDataRowsPerTeeType);
+                createTeeTypeCell(curTeeBoxInfo.teeType, numDataRowsPerTeeType);
+
+            // Set the background color
+            teeTypeButtonCell.style.backgroundColor = curTeeBoxInfo.hexColor;
+
             tableRow.appendChild(teeTypeButtonCell);
         }
 
@@ -785,7 +784,7 @@ function renderCourseInfoTableRows(teeBoxInfos, infoGrid) {
         // Set the row class attribute as the tee type so we can selectively
         // show/hide the rows associated with the tee type that the user
         // selects.
-        tableRow.setAttribute(ATTR_CLASS, teeTypeRowGroupInfo.teeType);
+        tableRow.setAttribute(ATTR_CLASS, curTeeBoxInfo.teeType);
 
         // Add the row to the array of rows we will be returning
         courseInfoTableRows.push(tableRow);
