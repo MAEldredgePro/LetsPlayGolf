@@ -2,7 +2,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
   height: 100vh;
   background-color: lightgray;
-  background-image: url("../images/caddyshack.jpg");
+  background-image: url("https://maeldredgepro.github.io/LetsPlayGolf/images/caddyshack.jpg");
   background-size: cover;
   margin: 0;
   display: flex;
