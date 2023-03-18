@@ -11,6 +11,10 @@ body {
   justify-content: center;
 }
 
+table {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
 .teetype-cell {
   background-color: rgba(0, 0, 0, 0);
   text-align: center;
