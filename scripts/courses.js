@@ -19,6 +19,7 @@ const BTN_LBL_PLAY_GOLF = 'Play Golf!';
 
 // const CLS_*
 //#region Class Names
+const CLS_TEETYPE_CELL = 'teetype-cell';
 const CLS_COURSE_INFO = 'course-info';
 const CLS_CTRL_ROW = 'control-row';
 const CLS_HEADER = 'header';
@@ -225,7 +226,7 @@ function createCourseInfoTableHeaderRow(numHoles) {
     const tableHeaderRow = ElementFactory.newTableRow(CLS_HEADER);
 
     // Add the 'Tee' column label to the table header row.
-    let tableRowLabel = ElementFactory.newTableHeaderCell(LBL_TEES);
+    let tableRowLabel = ElementFactory.newTableHeaderCell();
     tableHeaderRow.appendChild(tableRowLabel);
 
     // Add the 'Hole' column label to the table header row.
@@ -263,13 +264,16 @@ function createCourseInfoTableHeaderRow(numHoles) {
     return tableHeaderRow;
 }
 
-function createTeeTypeButtonCell(rowTeeType, numDataRowsPerTeeType) {
+function createTeeTypeCell(rowTeeType, numDataRowsPerTeeType) {
     // Create the tee type select button for the user
-    const teeTypeSelectButton = ElementFactory.newButton(rowTeeType);
+    const buttonLabel = `Play\n'${rowTeeType}'\ntees`;
+
+    const teeTypeSelectButton = ElementFactory.newButton(buttonLabel);
     teeTypeSelectButton.addEventListener(EV_CLICK, handleClickTeeTypeButton)
 
     // Create the table data cell to hold the select button
-    const teeTypeTableDatum = ElementFactory.newTableDatumCell();
+    const teeTypeTableDatum =
+        ElementFactory.newTableDatumCell(ElementFactory.NO_INNER_TEXT, CLS_TEETYPE_CELL);
     teeTypeTableDatum.setAttribute(ATTR_ROWSPAN, numDataRowsPerTeeType);
 
     // add the button to the cell
@@ -324,6 +328,7 @@ function handleChangeCourseSelect(event) {
     const courseSelect = event.target;
     const courseID = courseSelect[courseSelect.selectedIndex].id;
     g_playerList.length = 0;
+    document.body.style.backgroundImage = `url('../images/${courseID}.jpg')`;
     fetchCourseInfo(courseID);
     // The fetch registers a callback that will render the course info.
 }
@@ -413,25 +418,32 @@ function handleClickPlayButton() {
 }
 
 function handleClickTeeTypeButton(event) {
-    const selectedTeeType = event.target.innerText;
-    // console.log(`'${selectedTeeType}' button clicked`);
+    const eventButton = event.target;
+    const eventCell = eventButton.parentNode;
+    const eventRow = eventCell.parentNode;
+    const selectedTeeType = eventRow.className;
+    // console.log(`'${selectedTeeType}' row button clicked`);
 
     // Get the course info table.
     const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
 
     // Hide all of the rows except the ones belonging to the selected tee type.
     let curClassName = '';
-    for (row of courseInfoTable.rows) {
-        if (row.className != 'undefined') {
-            curClassName = row.className
+    for (tableRow of courseInfoTable.rows) {
+        if (tableRow.className != 'undefined') {
+            curClassName = tableRow.className
         }
 
         // Leave the header row and the selected tee rows alone.
         if (curClassName === CLS_HEADER) { continue; }
-        if (curClassName === selectedTeeType) { continue; }
+        if (curClassName === selectedTeeType) {
+            eventButton.remove();
+            eventCell.innerText = `'${curClassName}'\ntees\nselected`;
+            continue;
+        }
 
         // Hide the rows we don't care about.
-        row.style.display = 'none';
+        tableRow.style.display = 'none';
     }
 
     // Add the control buttons.
@@ -531,7 +543,7 @@ function renderCourseInfoTableRows(teeTypes, infoGrid) {
             // (ex: pro, champion, men's, women's) they would like to use
             // for the game they are about to play.
             const teeTypeTableDatum =
-                createTeeTypeButtonCell(rowTeeType, numDataRowsPerTeeType);
+                createTeeTypeCell(rowTeeType, numDataRowsPerTeeType);
 
             // add the cell to the row
             tableRow.appendChild(teeTypeTableDatum);
