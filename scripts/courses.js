@@ -579,7 +579,6 @@ function handleClickAddStrokes(event) {
 function handleClickPlayButton() {
     const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
     removeControlButtons(courseInfoTable);
-    alert("Let's Play Golf!");
     g_playModeActive = true;
 }
 
