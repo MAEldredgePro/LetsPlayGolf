@@ -10,7 +10,7 @@ body {
 }
 
 .outermost-container {
-  height: calc(75vh + env(safe-area-inset-top));
+  height: 75vh;
   background-color: pink;
   border: 0.8vw solid darkgreen;
   border-radius: 4vw;
