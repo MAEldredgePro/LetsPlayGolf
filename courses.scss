@@ -31,7 +31,8 @@ body {
     // height: 100%;
 
     // min-height: 75vh;
-    height: 75vh + val(safe-area-inset-top);
+    height: calc(75vh + env(safe-area-inset-top));
+    // height: calc(75vh + val(safe-area-inset-top));
     // max-height: 75vh;
 
     background-color: pink;
