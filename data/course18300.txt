@@ -115,21 +115,6 @@
                                     "hcp": 3,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675265,
-                                    "courseHoleId": 76697,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4031413225741,
-                                    "lng": -111.787138581276,
-                                    "par": 4,
-                                    "yards": 391,
-                                    "meters": 357,
-                                    "hcp": 3,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 2,
@@ -204,21 +189,6 @@
                                     "hcp": 5,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675270,
-                                    "courseHoleId": 76700,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4020792092027,
-                                    "lng": -111.782788038254,
-                                    "par": 5,
-                                    "yards": 521,
-                                    "meters": 476,
-                                    "hcp": 5,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 3,
@@ -293,21 +263,6 @@
                                     "hcp": 11,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675275,
-                                    "courseHoleId": 76704,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4068504178157,
-                                    "lng": -111.783050894737,
-                                    "par": 3,
-                                    "yards": 195,
-                                    "meters": 178,
-                                    "hcp": 11,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 4,
@@ -382,21 +337,6 @@
                                     "hcp": 13,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675280,
-                                    "courseHoleId": 76707,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4085619247846,
-                                    "lng": -111.78429543972,
-                                    "par": 4,
-                                    "yards": 421,
-                                    "meters": 384,
-                                    "hcp": 13,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 5,
@@ -471,21 +411,6 @@
                                     "hcp": 15,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675285,
-                                    "courseHoleId": 76709,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4051184428314,
-                                    "lng": -111.784563660622,
-                                    "par": 4,
-                                    "yards": 352,
-                                    "meters": 321,
-                                    "hcp": 15,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 6,
@@ -560,21 +485,6 @@
                                     "hcp": 1,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675290,
-                                    "courseHoleId": 76712,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4024019300379,
-                                    "lng": -111.784166693687,
-                                    "par": 4,
-                                    "yards": 429,
-                                    "meters": 392,
-                                    "hcp": 1,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 7,
@@ -649,21 +559,6 @@
                                     "hcp": 9,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675295,
-                                    "courseHoleId": 76715,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4054493188547,
-                                    "lng": -111.784729957581,
-                                    "par": 4,
-                                    "yards": 364,
-                                    "meters": 332,
-                                    "hcp": 9,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 8,
@@ -738,21 +633,6 @@
                                     "hcp": 17,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675300,
-                                    "courseHoleId": 76719,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4084812521041,
-                                    "lng": -111.785588264465,
-                                    "par": 3,
-                                    "yards": 160,
-                                    "meters": 146,
-                                    "hcp": 17,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 9,
@@ -827,21 +707,6 @@
                                     "hcp": 7,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675305,
-                                    "courseHoleId": 76722,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4076612445616,
-                                    "lng": -111.785923540592,
-                                    "par": 5,
-                                    "yards": 486,
-                                    "meters": 444,
-                                    "hcp": 7,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 10,
@@ -916,21 +781,6 @@
                                     "hcp": 12,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675310,
-                                    "courseHoleId": 76726,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4029084760769,
-                                    "lng": -111.78761869669,
-                                    "par": 5,
-                                    "yards": 463,
-                                    "meters": 423,
-                                    "hcp": 12,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 11,
@@ -1005,21 +855,6 @@
                                     "hcp": 14,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675315,
-                                    "courseHoleId": 76728,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4016952102438,
-                                    "lng": -111.782114803791,
-                                    "par": 4,
-                                    "yards": 393,
-                                    "meters": 359,
-                                    "hcp": 14,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 12,
@@ -1094,21 +929,6 @@
                                     "hcp": 6,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675320,
-                                    "courseHoleId": 76730,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4041094651626,
-                                    "lng": -111.781862676144,
-                                    "par": 3,
-                                    "yards": 217,
-                                    "meters": 198,
-                                    "hcp": 6,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 13,
@@ -1183,21 +1003,6 @@
                                     "hcp": 2,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675325,
-                                    "courseHoleId": 76732,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4011672080989,
-                                    "lng": -111.781637370586,
-                                    "par": 4,
-                                    "yards": 418,
-                                    "meters": 382,
-                                    "hcp": 2,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 14,
@@ -1272,21 +1077,6 @@
                                     "hcp": 18,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675330,
-                                    "courseHoleId": 76735,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4008577581085,
-                                    "lng": -111.785888671875,
-                                    "par": 3,
-                                    "yards": 176,
-                                    "meters": 160,
-                                    "hcp": 18,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 15,
@@ -1450,21 +1240,6 @@
                                     "hcp": 4,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675340,
-                                    "courseHoleId": 76739,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4006126481957,
-                                    "lng": -111.790974140167,
-                                    "par": 5,
-                                    "yards": 472,
-                                    "meters": 431,
-                                    "hcp": 4,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 17,
@@ -1539,21 +1314,6 @@
                                     "hcp": 8,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675345,
-                                    "courseHoleId": 76741,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.3965804620435,
-                                    "lng": -111.792744398117,
-                                    "par": 4,
-                                    "yards": 360,
-                                    "meters": 329,
-                                    "hcp": 8,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }, {
                                 "hole": 18,
@@ -1628,21 +1388,6 @@
                                     "hcp": 10,
                                     "hcp2": null,
                                     "teeHexColor": "#ff0000"
-                                }, {
-                                    "courseHoleTeeBoxId": 21675350,
-                                    "courseHoleId": 76742,
-                                    "teeTypeId": 5,
-                                    "teeType": "auto change location",
-                                    "teeColorTypeId": null,
-                                    "teeColorType": null,
-                                    "lat": 40.4001019996776,
-                                    "lng": -111.791617870331,
-                                    "par": 4,
-                                    "yards": 428,
-                                    "meters": 391,
-                                    "hcp": 10,
-                                    "hcp2": null,
-                                    "teeHexColor": null
                                 }]
                             }]
 	}
