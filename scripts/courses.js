@@ -3,10 +3,10 @@
 // Global Constants //
 //------------------//
 
-const VAL_VERSION_NUM = 'v03.19.003';
+const VAL_VERSION_NUM = 'v03.19.004';
 document.title = `Let's Play Golf ${VAL_VERSION_NUM}`;
 /* Version Note:
-courses.scss: Add h/w 100% to class outermost-div
+courses.js: Put version number back in ui element
 */
 
 // const ATTR_*
@@ -810,7 +810,8 @@ function renderCourseSelect(courses) {
 
     // Add a 'prompt' option which can't be selected,
     // but will prompt the user to make a course selection.
-    const promptOption = ElementFactory.newSelectOption(OPT_SELECT_COURSE);
+    const promptOption = ElementFactory.newSelectOption(VAL_VERSION_NUM);
+    // const promptOption = ElementFactory.newSelectOption(OPT_SELECT_COURSE);
     promptOption.selected = true;
     promptOption.disabled = true;
     courseSelect.appendChild(promptOption);
