@@ -12,6 +12,7 @@ body {
   background-color: pink;
   border: 0.8vw solid darkgreen;
   border-radius: 4vw;
+  overflow: hidden;
   background-image: url("https://maeldredgepro.github.io/LetsPlayGolf/images/caddyshack.jpg");
   background-size: 100% 100%;
   display: flex;
