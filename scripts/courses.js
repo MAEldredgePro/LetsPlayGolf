@@ -69,6 +69,7 @@ const LBL_HCP = 'HCP';
 //#endregion
 
 //#region Misc Constants
+const OPT_SELECT_COURSE = '23:24';
 const OPT_SELECT_COURSE = 'Select a course:';
 const PR_GET_STROKE_COUNT = 'How many strokes?';
 const VAL_NUM_HOLES = 18;
