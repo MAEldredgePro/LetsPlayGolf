@@ -3,11 +3,7 @@ A mobile-friendly golf score keeping app
 
 ---
 ## Actively Developing Requirement(s)
- - [ ] (3pt) Add some CSS to style the card to look like an actual golf card.
-   - [x] Add background images to courses screen
-     - [x] Custom image for each golf course
-   - [x] Make it easier to read hole numbers by providing a semi-transparent table background color
-   - [ ] Add tee-type colors provided in the the course info json
+ - [ ] (Bonus 3pt) Your golf scorecard is responsive (mobile friendly).
 
 ---
 ## Requirements
@@ -31,7 +27,11 @@ cumulative scores.
    - [x] This row should allow users to enter their name and a per-hole score.
    - [x] When a user enters a score for a hole, the 'out', 'in', and course
 total columns should update automatically.
- - [ ] (3pt) Add some CSS to style the card to look like an actual golf card.
+ - [x] (3pt) Add some CSS to style the card to look like an actual golf card.
+   - [x] Add background images to courses screen
+     - [x] Custom image for each golf course
+   - [x] Make it easier to read hole numbers by providing a semi-transparent table background color
+   - [x] Add tee-type colors provided in the the course info json
  - [x] (5pt) Allow users to select which tee they will be using
 (Men's, Women's, Pro, Amateur, etc.). All players will play from the same tee.
  - [x] (2pt) Allow up to four players in your scorecard.
