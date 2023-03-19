@@ -70,7 +70,7 @@ const LBL_HCP = 'HCP';
 
 //#region Misc Constants
 const OPT_SELECT_COURSE = '23:24';
-const OPT_SELECT_COURSE = 'Select a course:';
+//const OPT_SELECT_COURSE = 'Select a course:';
 const PR_GET_STROKE_COUNT = 'How many strokes?';
 const VAL_NUM_HOLES = 18;
 const VAL_GRID_HOLE_COLS = VAL_NUM_HOLES;
