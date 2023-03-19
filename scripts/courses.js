@@ -69,8 +69,8 @@ const LBL_HCP = 'HCP';
 //#endregion
 
 //#region Misc Constants
-const OPT_SELECT_COURSE = '00:47';
-//const OPT_SELECT_COURSE = 'Select a course:';
+const VAL_VERSION_NUM = 'v03.19.000';
+const OPT_SELECT_COURSE = 'Select a course:';
 const PR_GET_STROKE_COUNT = 'How many strokes?';
 const VAL_NUM_HOLES = 18;
 const VAL_GRID_HOLE_COLS = VAL_NUM_HOLES;
@@ -805,7 +805,8 @@ function renderCourseSelect(courses) {
 
     // Add a 'prompt' option which can't be selected,
     // but will prompt the user to make a course selection.
-    const promptOption = ElementFactory.newSelectOption(OPT_SELECT_COURSE);
+    const promptOption = ElementFactory.newSelectOption(VAL_VERSION_NUM);
+//    const promptOption = ElementFactory.newSelectOption(OPT_SELECT_COURSE);
     promptOption.selected = true;
     promptOption.disabled = true;
     courseSelect.appendChild(promptOption);
