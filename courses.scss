@@ -6,6 +6,8 @@ body {
     font-family: Arial, Helvetica, sans-serif;
     font-size: .5em;
 
+    max-height: 100vh;
+
     // This one didn't seem to have any effect
     // height: calc(100vh - val(safe-area-inset-top));
 
