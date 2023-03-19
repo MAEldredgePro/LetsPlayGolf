@@ -4,7 +4,7 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  height: calc(80vh - val(safe-area-inset-top));
+  height: 80vh;
   background-color: black;
   margin: 0;
 }

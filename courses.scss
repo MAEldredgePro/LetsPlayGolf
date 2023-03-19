@@ -4,8 +4,16 @@
 
 body {
     font-family: Arial, Helvetica, sans-serif;
+
+    // This one didn't seem to have any effect
     // height: calc(100vh - val(safe-area-inset-top));
-    height: calc(80vh - val(safe-area-inset-top));
+
+    // This one was really short, like 15px or something
+    // height: calc(80vh - val(safe-area-inset-top));
+
+    // Testing:
+    height: 80vh;
+
     //background-color: rgba(0, 0, 255, 0.05);
     background-color: black;
     margin: 0;
