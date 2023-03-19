@@ -3,10 +3,10 @@
 // Global Constants //
 //------------------//
 
-const VAL_VERSION_NUM = 'v03.19.005';
+const VAL_VERSION_NUM = 'v03.19.006';
 document.title = `Let's Play Golf ${VAL_VERSION_NUM}`;
 /* Version Note:
-courses.scss: Add a few styles that seem to work
+courses.scss: Add a few more styles. Check mobile
 */
 
 // const ATTR_*
