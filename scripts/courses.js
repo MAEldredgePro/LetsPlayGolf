@@ -3,6 +3,11 @@
 // Global Constants //
 //------------------//
 
+const VAL_VERSION_NUM = 'v03.19.001';
+/* Version Note:
+Trying to sort screen issues w/ help from ChatGPT
+*/
+
 // const ATTR_*
 //#region Attribute Names
 const ATTR_CLASS = 'class';
@@ -69,7 +74,7 @@ const LBL_HCP = 'HCP';
 //#endregion
 
 //#region Misc Constants
-const VAL_VERSION_NUM = 'v03.19.000';
+// const VAL_VERSION_NUM = 'v03.19.000';
 const OPT_SELECT_COURSE = 'Select a course:';
 const PR_GET_STROKE_COUNT = 'How many strokes?';
 const VAL_NUM_HOLES = 18;
