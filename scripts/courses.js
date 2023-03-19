@@ -3,10 +3,10 @@
 // Global Constants //
 //------------------//
 
-const VAL_VERSION_NUM = 'v03.19.002';
+const VAL_VERSION_NUM = 'v03.19.003';
 document.title = `Let's Play Golf ${VAL_VERSION_NUM}`;
 /* Version Note:
-Put version num in document.title
+courses.scss: Add h/w 100% to class outermost-div
 */
 
 // const ATTR_*
@@ -490,8 +490,8 @@ function generateInfoGrid(holesData) {
     return infoGrid;
 }
 
-function getOutermostContainer() {
-    return document.querySelector('.outermost-container');
+function getOutermostDiv() {
+    return document.querySelector('.outermost-div');
 }
 
 function handleClickAddPlayerButton(event) {
@@ -620,7 +620,7 @@ function handleUserChoseAGolfCourse(event) {
     const courseSelect = event.target;
     const courseID = courseSelect[courseSelect.selectedIndex].id;
     g_playerList.length = 0;
-    getOutermostContainer().style.backgroundImage =
+    getOutermostDiv().style.backgroundImage =
         `url('https://maeldredgepro.github.io/LetsPlayGolf/images/${courseID}.jpg')`;
 
     fetchCourseData(courseID);
@@ -635,7 +635,7 @@ function installCourseInfoTable(newCourseInfoTable) {
     }
 
     if (newCourseInfoTable) {
-        getOutermostContainer().appendChild(newCourseInfoTable);
+        getOutermostDiv().appendChild(newCourseInfoTable);
     }
 }
 
@@ -825,7 +825,7 @@ function renderCourseSelect(courses) {
     // Finished creating the course select dropdown.
     // Add its event listener and add it to the page.
     courseSelect.addEventListener(EV_CHANGE, handleUserChoseAGolfCourse);
-    getOutermostContainer().appendChild(courseSelect);
+    getOutermostDiv().appendChild(courseSelect);
 }
 
 function renderCourseData(holesData) {
