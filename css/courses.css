@@ -10,9 +10,9 @@ body {
 }
 
 .outermost-container {
-  min-height: 100vh;
-  height: 100vh;
-  max-height: 100vh;
+  min-height: 75vh;
+  height: 75vh;
+  max-height: 75vh;
   background-color: pink;
   border: 0.8vw solid darkgreen;
   border-radius: 4vw;
