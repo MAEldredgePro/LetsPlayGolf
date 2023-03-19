@@ -14,7 +14,7 @@ const ATTR_ROWSPAN = 'rowspan';
 // const BTN_LBL_*
 //#region Button Labels
 const BTN_LBL_ADD_PLAYER = 'Add a player';
-const BTN_LBL_PLAY_GOLF = 'Play Golf!';
+const BTN_LBL_PLAY_GAME = 'Start game with current player(s)';
 //#endregion
 
 // const CLS_*
@@ -61,7 +61,7 @@ const EV_CLICK = 'click';
 const LBL_HOLE = 'Hole';
 const LBL_IN = 'In';
 const LBL_OUT = 'Out';
-const LBL_TEES = 'Tees';
+const LBL_TEE_BOX = 'Tee Box';
 const LBL_TOTAL = 'Total'
 const LBL_YARDS = 'Yards';
 const LBL_PAR = 'Par';
@@ -355,7 +355,7 @@ function appendControlButtons(courseInfoTable) {
 
     if (g_playerList.length > 0) {
         appendFullWidthButton(
-            BTN_LBL_PLAY_GOLF, handleClickPlayButton,
+            BTN_LBL_PLAY_GAME, handleClickPlayButton,
             courseInfoTable, VAL_TOT_COLS
         );
     }
@@ -386,7 +386,7 @@ function createCourseInfoTableHeaderRow(numHoles) {
     const tableHeaderRow = ElementFactory.newTRow(CLS_HEADER);
 
     // Add the 'Tee' column label to the table header row.
-    let tableRowLabel = ElementFactory.newTableHeaderCell();
+    let tableRowLabel = ElementFactory.newTableHeaderCell(LBL_TEE_BOX);
     tableHeaderRow.appendChild(tableRowLabel);
 
     // Add the 'Hole' column label to the table header row.
