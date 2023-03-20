@@ -3,9 +3,8 @@ A mobile-friendly golf score keeping app
 
 ---
 ## Actively Developing Requirement(s)
-1. - [ ] (BONUS 2pt) include ES6 Modules. Indicate with a comment which js files
-and lines you specifically applied ES6 Modules
-     - [ ] a. put ElementFactory in its own module
+1. - [x] (3pt) Add some CSS to style the card to look like an actual golf card.
+     - [ ] Fix up the splash screen
 
 ---
 ## Requirements
@@ -47,3 +46,4 @@ from the api.
      - [x] a. The scorecard will show the new golf course information (par, yardage, etc.)
 1. - [ ] (BONUS 2pt) include ES6 Modules. Indicate with a comment which js files
 and lines you specifically applied ES6 Modules
+     - [x] a. put ElementFactory in its own module
