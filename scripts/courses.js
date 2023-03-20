@@ -3,10 +3,10 @@
 // Global Constants //
 //------------------//
 
-const VAL_VERSION_NUM = 'v03.19.006';
+const VAL_VERSION_NUM = 'v03.20.000';
 document.title = `Let's Play Golf ${VAL_VERSION_NUM}`;
 /* Version Note:
-courses.scss: Add a few more styles. Check mobile
+create and use a modudule
 */
 
 // const ATTR_*
@@ -15,7 +15,7 @@ const ATTR_CLASS = 'class';
 const ATTR_COLSPAN = 'colspan';
 const ATTR_ID = 'id';
 const ATTR_ROWSPAN = 'rowspan';
-//#endregion
+//#endregion Attribute Names
 
 // const BTN_LBL_*
 //#region Button Labels
@@ -43,17 +43,6 @@ function COURSE_DATA_URL(courseID) {
         + courseID
         + '.txt';
 }
-//#endregion
-
-// const EL_*
-//#region Element Names
-const EL_BUTTON = 'button';
-const EL_OPTION = 'option';
-const EL_SELECT = 'select';
-const EL_TABLE = 'table';
-const EL_TD = 'td';
-const EL_TH = 'th';
-const EL_TR = 'tr';
 //#endregion
 
 // const EV_
@@ -95,52 +84,7 @@ const VAL_TOT_COLS = VAL_TBL_LBL_COLS + VAL_GRID_TOT_COLS;
 //-------------------//
 // Global Data Types //
 //-------------------//
-class ElementFactory {
-    static newButton(innerText = null, classAttrValue = null) {
-        return this.#newElement(EL_BUTTON, innerText, classAttrValue);
-    }
-
-    static newSelectOption(innerText) {
-        return this.#newElement(EL_OPTION, innerText);
-    }
-
-    static newSelectDropdown(classAttrValue = null) {
-        return this.#newElement(EL_SELECT, this.NO_INNER_TEXT, classAttrValue);
-    }
-
-    static newTable(classAttrValue = null) {
-        return this.#newElement(EL_TABLE, this.NO_INNER_TEXT, classAttrValue);
-    }
-
-    static newTDCell(innerText = null, classAttrValue = null) {
-        return this.#newElement(EL_TD, innerText, classAttrValue);
-    }
-
-    static newTableHeaderCell(innerText = null, classAttrValue = null) {
-        return this.#newElement(EL_TH, innerText, classAttrValue);
-    }
-
-    static newTRow(classAttrValue = null) {
-        return this.#newElement(EL_TR, this.NO_INNER_TEXT, classAttrValue);
-    }
-
-    static #_NO_INNER_TEXT = null;
-    static get NO_INNER_TEXT() { return this.#_NO_INNER_TEXT; }
-
-    static #newElement(tag, innerText, classAttrValue = null) {
-        const element = document.createElement(tag);
-
-        if (classAttrValue) {
-            element.setAttribute(ATTR_CLASS, classAttrValue);
-        }
-
-        if (innerText) {
-            element.innerText = innerText;
-        }
-
-        return element;
-    }
-}
+import { ElementFactory } from "./modules/ElementFactory.mjs";
 
 class TeeBoxInfo {
     static datumLabels = [
@@ -595,7 +539,7 @@ function handleClickTeeTypeButton(event) {
 
     // Hide all of the rows except the ones belonging to the selected tee type.
     let curClassName = '';
-    for (tableRow of courseInfoTable.rows) {
+    for (const tableRow of courseInfoTable.rows) {
         if (tableRow.className != 'undefined') {
             curClassName = tableRow.className
         }
@@ -844,7 +788,7 @@ function renderCourseData(holesData) {
     const courseInfoTable = createCourseInfoTable();
 
     // Create and add the table header row.
-    tableHeaderRow = createCourseInfoTableHeaderRow(holesData.length);
+    const tableHeaderRow = createCourseInfoTableHeaderRow(holesData.length);
     courseInfoTable.appendChild(tableHeaderRow);
 
     // render and add the course info table data rows
