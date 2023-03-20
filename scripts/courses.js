@@ -21,6 +21,7 @@ const ATTR_ROWSPAN = 'rowspan';
 //#region Button Labels
 const BTN_LBL_ADD_PLAYER = 'Add a player';
 const BTN_LBL_PLAY_GAME = 'Start game with current player(s)';
+const BTN_LBL_END_GAME = 'Terminate the current game';
 //#endregion
 
 // const CLS_*
@@ -296,18 +297,32 @@ const functionTOC = [
 //| Function Definitions |
 //|======================|
 function appendControlButtons(courseInfoTable) {
-    if (g_playerList.length < 4) {
+    // If in play mode...
+    if (g_playModeActive){
+        // Add 'End Game' button
         appendFullWidthButton(
-            BTN_LBL_ADD_PLAYER, handleClickAddPlayerButton,
+            BTN_LBL_END_GAME, handleClickEndGameButton,
             courseInfoTable, VAL_TOT_COLS
         );
     }
+    else
+    // not in play mode
+    {
+        // If < 4 players, add the 'Add Player' buton.
+        if (g_playerList.length < 4) {
+            appendFullWidthButton(
+                BTN_LBL_ADD_PLAYER, handleClickAddPlayerButton,
+                courseInfoTable, VAL_TOT_COLS
+            );
+        }
 
-    if (g_playerList.length > 0) {
-        appendFullWidthButton(
-            BTN_LBL_PLAY_GAME, handleClickPlayButton,
-            courseInfoTable, VAL_TOT_COLS
-        );
+        // If at least one player, add the 'Play Game' button
+        if (g_playerList.length > 0) {
+            appendFullWidthButton(
+                BTN_LBL_PLAY_GAME, handleClickPlayButton,
+                courseInfoTable, VAL_TOT_COLS
+            );
+        }
     }
 }
 
@@ -525,6 +540,16 @@ function handleClickPlayButton() {
     const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
     removeControlButtons(courseInfoTable);
     g_playModeActive = true;
+    appendControlButtons(courseInfoTable);
+}
+
+function handleClickEndGameButton() {
+    const courseInfoTable = document.querySelector(CLS_SEL_COURSE_INFO);
+    removeControlButtons(courseInfoTable);
+    g_playModeActive = false;
+    toastr.success(`You are (L)PGA Tour material`);
+    // toastr.success(`${playerName}, you are (L)PGA Tour material`);
+    // toastr["success"]("You're done. Pack it in. Go home and spend some time with your family! (or PlayStation if you're single).", "Game Over");
 }
 
 function handleClickTeeTypeButton(event) {
