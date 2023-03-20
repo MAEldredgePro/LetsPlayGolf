@@ -39,6 +39,8 @@ cumulative scores.
 (Men's, Women's, Pro, Amateur, etc.). All players will play from the same tee.
 1. - [x] (2pt) Allow up to four players in your scorecard.
 1. - [x] (5pt) Minimum of 5+ commits
+1. - [ ] (?pt) Toasts! - Give some notification to the user when he/she is done
+playing.  Recomment js library called 'toaster' https://codeseven.github.io/toastr/
 1. - [x] (BONUS 3pt) Your golf scorecard is responsive (mobile friendly).
 1. - [x] (BONUS 3pt) Allow the golfer to select any golf course that is available
 from the api.

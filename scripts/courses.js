@@ -754,8 +754,8 @@ function renderCourseSelect(courses) {
 
     // Add a 'prompt' option which can't be selected,
     // but will prompt the user to make a course selection.
-    const promptOption = ElementFactory.newSelectOption(VAL_VERSION_NUM);
-    // const promptOption = ElementFactory.newSelectOption(OPT_SELECT_COURSE);
+    // const promptOption = ElementFactory.newSelectOption(VAL_VERSION_NUM);
+    const promptOption = ElementFactory.newSelectOption(OPT_SELECT_COURSE);
     promptOption.selected = true;
     promptOption.disabled = true;
     courseSelect.appendChild(promptOption);
