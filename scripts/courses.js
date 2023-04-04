@@ -85,7 +85,7 @@ const VAL_TOT_COLS = VAL_TBL_LBL_COLS + VAL_GRID_TOT_COLS;
 //-------------------//
 // Global Data Types //
 //-------------------//
-import { ElementFactory } from "./modules/ElementFactory.mjs";
+import { ElementFactory } from "./modules/element-factory.mjs";
 
 class TeeBoxInfo {
     static datumLabels = [
